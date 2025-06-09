@@ -9,6 +9,7 @@
 | 🩼 Referensi 1 | [Avila K](https://github.com/AvlKP/EL2008-PMC-Tubes) |
 | 🩼 Referensi 2 | [Stefen S](https://github.com/StefenSutandi/Clinic-Management-using-GTK4) |
 | 🩼 Referensi 3 | [Falih R](https://github.com/falihrosyidi/TubesPMP-Kelompok6) |
+| 🩼 Referensi 4 | [Rifki A](https://github.com/Labpro-21/Employee-Shifting-Generator?tab=readme-ov-file) |
 
 ## Timeline
 - **June 13**: Tugas individu kelar

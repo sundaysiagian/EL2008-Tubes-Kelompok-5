@@ -1,1 +1,15 @@
 
+id_dokter,nama_dokter,spesialisasi,hari,jam_mulai,jam_selesai,ruangan,status
+D001,Dr. Partogi Tachibana,Kardiologi,Senin,08:00,12:00,R101,Aktif
+D001,Dr. Partogi Tachibana,Kardiologi,Rabu,14:00,18:00,R101,Aktif
+D001,Dr. Partogi Tachibana,Kardiologi,Jumat,08:00,12:00,R101,Aktif
+D002,Dr. Gregorius Angelica,Pediatri,Senin,09:00,15:00,R203,Aktif
+D002,Dr. Gregorius Angelica,Pediatri,Selasa,09:00,15:00,R203,Aktif
+D002,Dr. Gregorius Angelica,Pediatri,Kamis,09:00,15:00,R203,Aktif
+D003,Dr. Budi Hartono,Neurologi,Selasa,08:00,16:00,R105,Aktif
+D003,Dr. Budi Hartono,Neurologi,Kamis,08:00,16:00,R105,Aktif
+D004,Dr. Nicholas Mumpuni,Dermatologi,Senin,13:00,17:00,R302,Aktif
+D004,Dr. Nicholas Mumpuni,Dermatologi,Rabu,13:00,17:00,R302,Aktif
+D004,Dr. Nicholas Mumpuni,Dermatologi,Jumat,13:00,17:00,R302,Aktif
+D005,Dr. Dhani Sitorus,Orthopedi,Selasa,10:00,14:00,R205,Aktif
+D005,Dr. Dhani Sitorus,Orthopedi,Jumat,10:00,14:00,R205,Aktif

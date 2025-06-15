@@ -56,7 +56,7 @@ int main() {
 
     if (solveJadwal(jadwal, 0)) {
         printf("Jadwal berhasil dibuat!\n\n");
-        simpanJadwalKeCSV(jadwal, "jadwal.csv");
+        simpanJadwalKeCSV(jadwal, "../../data/sample/jadwal_dokter.csv");
         tampilkanJadwal(jadwal);
     } else {
         printf("Gagal membuat jadwal. Tidak ada solusi yang memungkinkan dengan batasan yang ada.\n");

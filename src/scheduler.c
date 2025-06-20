@@ -70,23 +70,27 @@ bool apakahAlokasiValid(Shift jadwal[], Dokter* dokter, int index_shift) {
 }
 
 
-bool solveJadwal(Shift jadwal[], int index_shift) {
-    if (index_shift == TOTAL_SHIFT) {
+bool solveJadwal(Shift jadwal[], int idx) {
+    if (idx == TOTAL_SHIFT) {
         return true;
     }
 
-    for (int i = 0; i < jumlah_dokter; i++) {
-        if (apakahAlokasiValid(jadwal, &daftar_dokter[i], index_shift)) {
-            jadwal[index_shift].dokter_bertugas = &daftar_dokter[i];
+    for (int j = 0; j < jumlah_dokter; j++) {
+        Dokter* d = &daftar_dokter[j];
 
-            if (solveJadwal(jadwal, index_shift + 1)) {
+        if (apakahAlokasiValid(jadwal, d, idx)) {
+            jadwal[idx].dokter_bertugas = d;
+
+            if (solveJadwal(jadwal, idx + 1)) {
                 return true;
             }
 
-            jadwal[index_shift].dokter_bertugas = NULL; // BACKTRACK
+            // gagal, balik lagi
+            jadwal[idx].dokter_bertugas = NULL;
         }
     }
-    return false;
+
+    return false; // tidak ada yang cocok
 }
 
 
@@ -108,36 +112,27 @@ void tampilkanJadwal(Shift jadwal[]) {
 }
 
 void simpanJadwalKeCSV(Shift jadwal[], const char* nama_file) {
-    printf("\nMenyimpan jadwal ke file %s...\n", nama_file);
-
-    // write file
-    FILE *file = fopen(nama_file, "w");
-    if (file == NULL) {
-        perror("Error: Gagal membuka file untuk ditulis");
-        return; // Keluar dari fungsi jika gagal
+    FILE *f = fopen(nama_file, "w");
+    if (!f) {
+        printf("Gagal buka file untuk tulis: %s\n", nama_file);
+        return;
     }
 
-    // // buat header
-    fprintf(file, "Hari,Tipe Shift,Nama Dokter\n");
+    fprintf(f, "Hari,Shift,NamaDokter\n");
 
-    // tulis data
     for (int i = 0; i < TOTAL_SHIFT; i++) {
-        // Ambil nama dokter 
-        const char* nama_dokter = "KOSONG";
+        const char* nama = "KOSONG";
         if (jadwal[i].dokter_bertugas != NULL) {
-            nama_dokter = jadwal[i].dokter_bertugas->nama;
+            nama = jadwal[i].dokter_bertugas->nama;
         }
 
-        fprintf(file, "%d,%s,%s\n",
-                jadwal[i].hari_ke + 1, 
-                jadwal[i].tipe_shift,
-                nama_dokter);
+        fprintf(f, "%d,%s,%s\n", jadwal[i].hari_ke + 1, jadwal[i].tipe_shift, nama);
     }
 
-    //close
-    fclose(file);
-    printf("Jadwal berhasil dibuat dan disimpan.\n");
+    fclose(f);
+    printf("File %s berhasil disimpan.\n", nama_file);
 }
+
 
 int muatDataDokter(const char* path_file) {
     FILE *fp = fopen(path_file, "r");

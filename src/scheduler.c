@@ -71,27 +71,39 @@ bool apakahAlokasiValid(Shift jadwal[], Dokter* dokter, int index_shift) {
 
 
 bool solveJadwal(Shift jadwal[], int idx) {
-    if (idx == TOTAL_SHIFT) {
+    // Kalau semua shift sudah terisi, done
+    if (idx >= TOTAL_SHIFT) {
         return true;
     }
 
+    // per dokter
     for (int j = 0; j < jumlah_dokter; j++) {
-        Dokter* d = &daftar_dokter[j];
+        Dokter* test = &daftar_dokter[j];
 
-        if (apakahAlokasiValid(jadwal, d, idx)) {
-            jadwal[idx].dokter_bertugas = d;
+        // cek apa dia bisa
+        bool bisa_dipilih = apakahAlokasiValid(jadwal, test, idx);
 
-            if (solveJadwal(jadwal, idx + 1)) {
-                return true;
+        if (bisa_dipilih) {
+            // tes pasang dia di shift kalo bisa
+            jadwal[idx].dokter_bertugas = test;
+
+            // lanjut 
+            bool sisa_ok = solveJadwal(jadwal, idx + 1);
+            if (sisa_ok) {
+                return true; // if berhasil, tidak perlu coba dokter lain
             }
 
-            // gagal, balik lagi
+            // kalau tidak berhasil, batal
             jadwal[idx].dokter_bertugas = NULL;
         }
+
+        // Kalau tidak valid, lanjut ke dokter berikutnya
     }
 
-    return false; // tidak ada yang cocok
+    // semua dokter dicoba tapi gagal, gagal
+    return false;
 }
+
 
 
 

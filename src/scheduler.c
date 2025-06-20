@@ -56,13 +56,16 @@ bool apakahAlokasiValid(Shift jadwal[], Dokter* dokter, int index_shift) {
     }
     
     // terakhir liat preferensi
-    // Jika dokter tidak preferensi shift ini, anggap tidak valid agar algoritma
-    // mencari dokter lain yang lebih cocok. Ini adalah cara sederhana untuk optimasi.
-    if (strcmp(jadwal[index_shift].tipe_shift, "pagi") == 0 && dokter->pref_pagi == 0) return false;
-    if (strcmp(jadwal[index_shift].tipe_shift, "siang") == 0 && dokter->pref_siang == 0) return false;
-    if (strcmp(jadwal[index_shift].tipe_shift, "malam") == 0 && dokter->pref_malam == 0) return false;
-
-
+    // Jika dokter pref, cari yg lain
+    if (strcmp(jadwal[index_shift].tipe_shift, "pagi") == 0 && dokter->pref_pagi == 0){
+        return false;
+    }
+    if (strcmp(jadwal[index_shift].tipe_shift, "siang") == 0 && dokter->pref_siang == 0){
+        return false;
+    }
+    if (strcmp(jadwal[index_shift].tipe_shift, "malam") == 0 && dokter->pref_malam == 0){
+        return false;
+    }
     return true;
 }
 
@@ -86,14 +89,7 @@ bool solveJadwal(Shift jadwal[], int index_shift) {
     return false;
 }
 
-void inisialisasiJadwal(Shift jadwal[]) {
-    char tipe[3][10] = {"pagi", "siang", "malam"};
-    for (int i = 0; i < TOTAL_SHIFT; i++) {
-        jadwal[i].hari_ke = i / 3;
-        strcpy(jadwal[i].tipe_shift, tipe[i % 3]);
-        jadwal[i].dokter_bertugas = NULL;
-    }
-}
+
 
 void tampilkanJadwal(Shift jadwal[]) {
     printf("====================================================\n");
@@ -143,45 +139,43 @@ void simpanJadwalKeCSV(Shift jadwal[], const char* nama_file) {
     printf("Jadwal berhasil dibuat dan disimpan.\n");
 }
 
-int muatDataDokter(const char* nama_file) {
-    FILE *file = fopen(nama_file, "r");
-    if (file == NULL) {
-        perror("Error: Tidak bisa membuka file");
+int muatDataDokter(const char* path_file) {
+    FILE *fp = fopen(path_file, "r");
+    if (!fp) {
+        printf("Gagal membuka file: %s\n", path_file);
         return -1;
     }
-    char line[MAX_LINE_LEN];
-    fgets(line, sizeof(line), file); // Skip header
 
-    int count = 0;
-    while (fgets(line, sizeof(line), file) && count < MAX_DOKTER) {
-        line[strcspn(line, "\n")] = 0;
-        char *token;
-        token = strtok(line, ","); 
-        if (token) {
-            strcpy(daftar_dokter[count].nama, token);
-        }
-        token = strtok(NULL, ","); 
-        if (token) {
-            daftar_dokter[count].maks_shift_mingguan = atoi(token);
-        }
+    char baris[MAX_LINE_LEN];
+    fgets(baris, sizeof(baris), fp); // skip header
+
+    int i = 0;
+    while (fgets(baris, sizeof(baris), fp) && i < MAX_DOKTER) {
+        baris[strcspn(baris, "\n")] = 0; // hapus newline
+
+        // parsing csv (satu-satu aja)
+        char *token = strtok(baris, ",");
+        if (token) strcpy(daftar_dokter[i].nama, token);
+
         token = strtok(NULL, ",");
-        
-        if (token) {
-            daftar_dokter[count].pref_pagi = atoi(token);
-        }
-        token = strtok(NULL, ","); 
-        if (token) {
-            daftar_dokter[count].pref_siang = atoi(token);
-        }
-        token = strtok(NULL, ","); 
-        if (token) {
-            daftar_dokter[count].pref_malam = atoi(token);
-        }
-        count++;
+        if (token) daftar_dokter[i].maks_shift_mingguan = atoi(token);
+
+        token = strtok(NULL, ",");
+        if (token) daftar_dokter[i].pref_pagi = atoi(token);
+
+        token = strtok(NULL, ",");
+        if (token) daftar_dokter[i].pref_siang = atoi(token);
+
+        token = strtok(NULL, ",");
+        if (token) daftar_dokter[i].pref_malam = atoi(token);
+
+        i++;
     }
-    fclose(file);
-    return count;
+
+    fclose(fp);
+    return i;
 }
+
 
 
 
@@ -196,7 +190,27 @@ int main() {
     printf("Data %d dokter berhasil dimuat.\n\n", jumlah_dokter);
 
     Shift jadwal[TOTAL_SHIFT];
-    inisialisasiJadwal(jadwal);
+
+    // Inisialisasi shift (manual per 3 shift per hari)
+    for (int hari = 0, i = 0; hari < 30; hari++) {
+        //  pagi
+        jadwal[i].hari_ke = hari;
+        strcpy(jadwal[i].tipe_shift, "pagi");
+        jadwal[i].dokter_bertugas = NULL;
+        i++;
+
+        //  siang
+        jadwal[i].hari_ke = hari;
+        strcpy(jadwal[i].tipe_shift, "siang");
+        jadwal[i].dokter_bertugas = NULL;
+        i++;
+
+        //  malam
+        jadwal[i].hari_ke = hari;
+        strcpy(jadwal[i].tipe_shift, "malam");
+        jadwal[i].dokter_bertugas = NULL;
+        i++;
+    }
 
     if (solveJadwal(jadwal, 0)) {
         printf("Jadwal berhasil dibuat!\n\n");
@@ -208,6 +222,7 @@ int main() {
 
     return 0;
 }
+
 
 //====================================================
 

@@ -31,47 +31,6 @@ int jumlah_dokter = 0;
 
 
 // dklarasi fungsi-fungsi
-int muatDataDokter(const char* nama_file);
-void inisialisasiJadwal(Shift jadwal[]);
-void simpanJadwalKeCSV(Shift jadwal[], const char* nama_file);
-bool apakahAlokasiValid(Shift jadwal[], Dokter* dokter, int index_shift);
-bool solveJadwal(Shift jadwal[], int index_shift);
-void tampilkanJadwal(Shift jadwal[]);
-
-
-
-
-
-// INI MAINNYA========================================
-int main() {
-    jumlah_dokter = muatDataDokter("../../data/sample/data_dokter.csv");
-
-    if (jumlah_dokter == -1) {
-        return 1;
-    }
-    printf("Data %d dokter berhasil dimuat.\n\n", jumlah_dokter);
-
-    Shift jadwal[TOTAL_SHIFT];
-    inisialisasiJadwal(jadwal);
-
-    if (solveJadwal(jadwal, 0)) {
-        printf("Jadwal berhasil dibuat!\n\n");
-        simpanJadwalKeCSV(jadwal, "../../data/sample/jadwal_dokter.csv");
-        tampilkanJadwal(jadwal);
-    } else {
-        printf("Gagal membuat jadwal. Tidak ada solusi yang memungkinkan dengan batasan yang ada.\n");
-    }
-
-    return 0;
-}
-
-//====================================================
-
-
-
-
-// tiap fungsi diimpplementasikan
-
 bool apakahAlokasiValid(Shift jadwal[], Dokter* dokter, int index_shift) {
     int hari_ini = index_shift / 3;
 
@@ -106,6 +65,7 @@ bool apakahAlokasiValid(Shift jadwal[], Dokter* dokter, int index_shift) {
 
     return true;
 }
+
 
 bool solveJadwal(Shift jadwal[], int index_shift) {
     if (index_shift == TOTAL_SHIFT) {
@@ -166,24 +126,22 @@ void simpanJadwalKeCSV(Shift jadwal[], const char* nama_file) {
 
     // tulis data
     for (int i = 0; i < TOTAL_SHIFT; i++) {
-        // Ambil nama dokter, atau tulis "KOSONG" jika shift tidak terisi
+        // Ambil nama dokter 
         const char* nama_dokter = "KOSONG";
         if (jadwal[i].dokter_bertugas != NULL) {
             nama_dokter = jadwal[i].dokter_bertugas->nama;
         }
 
         fprintf(file, "%d,%s,%s\n",
-                jadwal[i].hari_ke + 1, // Tampilkan hari mulai dari 1, bukan 0
+                jadwal[i].hari_ke + 1, 
                 jadwal[i].tipe_shift,
                 nama_dokter);
     }
 
     //close
     fclose(file);
-
-    printf("Jadwal berhasil disimpan.\n");
+    printf("Jadwal berhasil dibuat dan disimpan.\n");
 }
-
 
 int muatDataDokter(const char* nama_file) {
     FILE *file = fopen(nama_file, "r");
@@ -224,3 +182,43 @@ int muatDataDokter(const char* nama_file) {
     fclose(file);
     return count;
 }
+
+
+
+
+// INI MAINNYA========================================
+int main() {
+    jumlah_dokter = muatDataDokter("../../data/sample/daftar_dokter.csv");
+
+    if (jumlah_dokter == -1) {
+        return 1;
+    }
+    printf("Data %d dokter berhasil dimuat.\n\n", jumlah_dokter);
+
+    Shift jadwal[TOTAL_SHIFT];
+    inisialisasiJadwal(jadwal);
+
+    if (solveJadwal(jadwal, 0)) {
+        printf("Jadwal berhasil dibuat!\n\n");
+        simpanJadwalKeCSV(jadwal, "../../data/sample/jadwal_dokter.csv");
+        // tampilkanJadwal(jadwal);
+    } else {
+        printf("Gagal membuat jadwal. Tidak ada solusi yang memungkinkan dengan batasan yang ada.\n");
+    }
+
+    return 0;
+}
+
+//====================================================
+
+
+
+
+
+
+
+
+
+
+
+

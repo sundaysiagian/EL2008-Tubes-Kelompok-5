@@ -51,7 +51,7 @@ void read_csv(const char *filename) {
     printf("Data dokter dari %s berhasil dimuat.\n", filename);
 }
 
-// MODIFIKASI: 3. Menyimpan 5 kolom ke CSV
+// Simpan 5 kolom ke CSV
 void simpanCSV(const char *filename) {
     FILE *file = fopen(filename, "w");
     if (!file) {

@@ -129,7 +129,7 @@ void simpanJadwalKeCSV(Shift jadwal[], const char* nama_file) {
         return;
     }
 
-    if (fprintf(f, "Hari,Shift,DoctorPosition,NamaDokter\n") < 0) {
+    if (fprintf(f, "Hari,Shift,JabatanDokter,NamaDokter\n") < 0) {
         printf("Error: Gagal menulis header ke file.\n");
         fclose(f);
         return;
@@ -335,7 +335,7 @@ void analisisKeadilan(Shift jadwal[], Dokter daftar_dokter[], int jumlah_dokter)
     printf("=================================\n");
     printf("Rata-rata shift per dokter: %.2f\n", avg_shifts);
     printf("Standar deviasi: %.2f\n", std_dev);
-    printf("Coefficient of variation: %.2f%%\n", (std_dev/avg_shifts)*100);
+    printf("Koefisien Variansi: %.2f%%\n", (std_dev/avg_shifts)*100);
 
     if ((std_dev/avg_shifts)*100 < 10) {
         printf("Distribusi shift sangat merata\n");

@@ -12,5 +12,6 @@ void analisisKeadilan(Shift jadwal[], Dokter daftar_dokter[], int jumlah_dokter)
 int hitungPelanggaranPreferensi(Shift jadwal[]);
 void simpanJadwalKeCSV(Shift jadwal[], const char* nama_file);
 void tampilkanJadwalPerDokter(Shift jadwal[], Dokter *dokter);
+int hitungJumlahShiftDokter(Shift jadwal[], Dokter *dokter); // Add this line
 
 #endif

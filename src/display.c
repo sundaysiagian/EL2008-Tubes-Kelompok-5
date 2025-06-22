@@ -6,6 +6,24 @@
 #include "../include/types.h"
 #include "../include/display.h"
 
+// Add this to display.c
+int hitungJumlahShiftDokter(Shift jadwal[], Dokter *dokter) {
+    int count = 0;
+    
+    // Loop through all shifts (90 shifts = 30 days * 3 shifts/day)
+    for (int i = 0; i < TOTAL_SHIFT; i++) {
+        // Check if this doctor is assigned to this shift
+        for (int j = 0; j < jadwal[i].jumlah_dokter; j++) {
+            if (jadwal[i].dokter_bertugas[j] == dokter) {
+                count++;
+                break; // Found the doctor in this shift, no need to check further
+            }
+        }
+    }
+    
+    return count;
+}
+
 void tampilkanJadwalHarian(Shift jadwal[], int hari) {
     if (hari < 0 || hari >= 30) {
         printf("Error: Hari harus antara 1-30.\n");

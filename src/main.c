@@ -12,34 +12,35 @@
 void displaySplashScreen() {
     clearScreen();
     printf("\n\n");
-    printf("  ███████╗███████╗███╗   ███╗ ██████╗  ██████╗  █████╗ \n");
-    printf("  ██╔════╝██╔════╝████╗ ████║██╔═══██╗██╔════╝ ██╔══██╗\n");
-    printf("  ███████╗█████╗  ██╔████╔██║██║   ██║██║  ███╗███████║\n");
-    printf("  ╚════██║██╔══╝  ██║╚██╔╝██║██║   ██║██║   ██║██╔══██║\n");
-    printf("  ███████║███████╗██║ ╚═╝ ██║╚██████╔╝╚██████╔╝██║  ██║\n");
-    printf("  ╚══════╝╚══════╝╚═╝     ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝\n");
-    printf("\n");
-    printf("  ███████╗███████╗██╗  ██╗ █████╗ ████████╗\n");
-    printf("  ██╔════╝██╔════╝██║  ██║██╔══██╗╚══██╔══╝\n");
-    printf("  ███████╗█████╗  ███████║███████║   ██║   \n");
-    printf("  ╚════██║██╔══╝  ██╔══██║██╔══██║   ██║   \n");
-    printf("  ███████║███████╗██║  ██║██║  ██║   ██║   \n");
-    printf("  ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   \n");
-    printf("\n");
-    printf("  ███████╗███████╗██╗      █████╗ ██╗     ██╗   ██╗\n");
-    printf("  ██╔════╝██╔════╝██║     ██╔══██╗██║     ██║   ██║\n");
-    printf("  ███████╗█████╗  ██║     ███████║██║     ██║   ██║\n");
-    printf("  ╚════██║██╔══╝  ██║     ██╔══██║██║     ██║   ██║\n");
-    printf("  ███████║███████╗███████╗██║  ██║███████╗╚██████╔╝\n");
-    printf("  ╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝ ╚═════╝ \n");
+    printf("     _______. _______ .___  ___.   ______     _______      ___      \n");
+    printf("    /       ||   ____||   \\/   |  /  __  \\   /  _____|    /   \\     \n");
+    printf("   |   (----`|  |__   |  \\  /  | |  |  |  | |  |  __     /  ^  \\    \n");
+    printf("    \\   \\    |   __|  |  |\\/|  | |  |  |  | |  | |_ |   /  /_\\  \\   \n");
+    printf(".----)   |   |  |____ |  |  |  | |  `--'  | |  |__| |  /  _____  \\  \n");
+    printf("|_______/    |_______||__|  |__|  \\______/   \\______| /__/     \\__\\ \n");
+    printf("                                                                    \n");
+    printf("     _______. _______  __    __       ___   .___________.           \n");
+    printf("    /       ||   ____||  |  |  |     /   \\  |           |           \n");
+    printf("   |   (----`|  |__   |  |__|  |    /  ^  \\ `---|  |----`           \n");
+    printf("    \\   \\    |   __|  |   __   |   /  /_\\  \\    |  |                \n");
+    printf(".----)   |   |  |____ |  |  |  |  /  _____  \\   |  |                \n");
+    printf("|_______/    |_______||__|  |__| /__/     \\__\\  |__|                \n");
+    printf("                                                                    \n");
+    printf("     _______. _______  __          ___       __       __    __      \n");
+    printf("    /       ||   ____||  |        /   \\     |  |     |  |  |  |     \n");
+    printf("   |   (----`|  |__   |  |       /  ^  \\    |  |     |  |  |  |     \n");
+    printf("    \\   \\    |   __|  |  |      /  /_\\  \\   |  |     |  |  |  |     \n");
+    printf(".----)   |   |  |____ |  `----./  _____  \\  |  `----.|  `--'  |     \n");
+    printf("|_______/    |_______||_______/__/     \\__\\ |_______| \\______/      \n");
+    printf("                                                                    \n");
     printf("\n\n");
-    printf("              Programmed by Kelompok 5             \n");
-    printf("\n\n");
-    printf("                  For Pak Hilton                   \n");
+    printf("                       Programmed by Kelompok 5                       \n");
+    printf("\n");
+    printf("                           For Pak Hilton                            \n");
     printf("\n\n");
     
-    // Animation for loading
-    printf("                      Loading system");
+    // Animation for loading - center aligned
+    printf("                           Loading system");
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             printf(".");
@@ -50,16 +51,16 @@ void displaySplashScreen() {
         fflush(stdout);
     }
     
-    printf("\n\n                Press Enter to continue...");
+    printf("\n\n                      Press Enter to continue...");
     getchar();
 }
+
 int main() {
     Dokter daftar_dokter[MAX_DOCTORS];
     Shift jadwal[TOTAL_SHIFT];
     int jumlah_dokter = 0;
     int jadwal_dibuat = 0;
     int pilihan;
-    char input[100];
     
     // Display the splash screen
     displaySplashScreen();

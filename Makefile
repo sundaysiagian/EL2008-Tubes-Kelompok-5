@@ -1,35 +1,39 @@
 CC = gcc
-# Add dependency generation flags
-CFLAGS = -Wall -g -MMD -MP
-
+CFLAGS = -Wall -Iinclude
 SRC_DIR = src
 OBJ_DIR = obj
-INC_DIR = include
+BIN_DIR = bin
 
-SRC = $(wildcard $(SRC_DIR)/*.c)
-OBJ = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC))
-# Get a list of dependency files that will be generated
-DEPS = $(OBJ:.o=.d)
-EXECUTABLE = doctor_scheduler
+# List all source files
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+# Generate object file names from source files
+OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+# Executable name
+EXEC = $(BIN_DIR)/schedule_manager
 
-all: directories $(EXECUTABLE)
+# Default target
+all: directories $(EXEC)
 
+# Create required directories
 directories:
-    @mkdir -p $(OBJ_DIR)
-    @mkdir -p data
+	@if not exist $(OBJ_DIR) mkdir $(OBJ_DIR)
+	@if not exist $(BIN_DIR) mkdir $(BIN_DIR)
 
-$(EXECUTABLE): $(OBJ)
-    $(CC) $(CFLAGS) -o $@ $^
-
+# Compile each source file into an object file
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-    $(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
-clean:
-    rm -rf $(OBJ_DIR)
-    rm -f $(EXECUTABLE)
+# Link all object files to create the executable
+$(EXEC): $(OBJS)
+	$(CC) $(OBJS) -o $(EXEC) -lm
 
+# Run the program
 run: all
-    ./$(EXECUTABLE)
+	$(EXEC)
 
-# Include the dependency files. The '-' means make will not complain if the files don't exist.
--include $(DEPS)
+# Clean generated files
+clean:
+	@if exist $(OBJ_DIR) rmdir /s /q $(OBJ_DIR)
+	@if exist $(BIN_DIR) rmdir /s /q $(BIN_DIR)
+
+.PHONY: all run clean directories

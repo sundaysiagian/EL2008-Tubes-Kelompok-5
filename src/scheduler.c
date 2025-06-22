@@ -421,7 +421,6 @@ void doctorManagementMenu(Dokter daftar[], int *jumlah) {
     int pilihan;
     char nama[50];
     int maks_shift, pref_pagi, pref_siang, pref_malam;
-    char input[100];
 
     while(1) {
         clearScreen();

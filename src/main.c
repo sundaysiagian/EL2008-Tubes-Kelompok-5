@@ -39,15 +39,14 @@ void displaySplashScreen() {
     printf("                           For Pak Hilton                            \n");
     printf("\n\n");
     
-    // Animation for loading - center aligned
     printf("                           Loading system");
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             printf(".");
             fflush(stdout);
-            usleep(300000); // 300ms delay
+            usleep(300000); 
         }
-        printf("\b\b\b   \b\b\b"); // Clear the dots
+        printf("\b\b\b   \b\b\b");
         fflush(stdout);
     }
     
@@ -62,10 +61,8 @@ int main() {
     int jadwal_dibuat = 0;
     int pilihan;
     
-    // Display the splash screen
     displaySplashScreen();
     
-    // Main program loop
     while (1) {
         clearScreen();
         displayEnhancedMenu();

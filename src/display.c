@@ -6,17 +6,14 @@
 #include "../include/types.h"
 #include "../include/display.h"
 
-// Add this to display.c
 int hitungJumlahShiftDokter(Shift jadwal[], Dokter *dokter) {
     int count = 0;
     
-    // Loop through all shifts (90 shifts = 30 days * 3 shifts/day)
     for (int i = 0; i < TOTAL_SHIFT; i++) {
-        // Check if this doctor is assigned to this shift
         for (int j = 0; j < jadwal[i].jumlah_dokter; j++) {
             if (jadwal[i].dokter_bertugas[j] == dokter) {
                 count++;
-                break; // Found the doctor in this shift, no need to check further
+                break; 
             }
         }
     }
@@ -86,8 +83,6 @@ void tampilkanJumlahShiftDokter(Shift jadwal[], Dokter daftar_dokter[], int juml
 
     free(jumlah_shift);
 }
-
-// ...existing code...
 
 void tampilkanPelanggaranPreferensiPerDokter(Shift jadwal[], Dokter daftar_dokter[], int jumlah_dokter) {
     int *pelanggaran = calloc(jumlah_dokter, sizeof(int));
@@ -241,7 +236,7 @@ void tampilkanDistribusiShift(Shift jadwal[], Dokter daftar_dokter[], int jumlah
         shift_counts[i] = calloc(3, sizeof(int));
         if (!shift_counts[i]) {
             printf("Error: Gagal mengalokasikan memori.\n");
-            // Free already allocated memory
+    
             for (int j = 0; j < i; j++) {
                 free(shift_counts[j]);
             }

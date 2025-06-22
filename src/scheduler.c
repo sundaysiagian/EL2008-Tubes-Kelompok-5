@@ -731,7 +731,7 @@ void inisialisasiJadwal(Shift jadwal[]) {
 }
 
 bool solveJadwal(Shift jadwal[], int idx, int doctors_needed_per_shift, Dokter dokter[], int jumlah_dokter) {
-    // Base case: we've processed all shifts
+    // base case
     if (idx >= TOTAL_SHIFT) {
         return true;
     }

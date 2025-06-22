@@ -6,20 +6,25 @@
 #include "../include/types.h"
 #include "../include/display.h"
 
-int hitungJumlahShiftDokter(Shift jadwal[], Dokter *dokter) {
-    int count = 0;
-    
+// hitung berapa kali dokter ditaro di jadwal
+int hitungJumlahShiftDokter(Shift jadwal[], Dokter *target_dokter) {
+    int jumlah_shift = 0;
+
     for (int i = 0; i < TOTAL_SHIFT; i++) {
-        for (int j = 0; j < jadwal[i].jumlah_dokter; j++) {
-            if (jadwal[i].dokter_bertugas[j] == dokter) {
-                count++;
-                break; 
+        Shift shift = jadwal[i];
+        
+        for (int j = 0; j < shift.jumlah_dokter; j++) {
+            // dari pointer
+            if (shift.dokter_bertugas[j] == target_dokter) {
+                jumlah_shift++;
+                break; // dokter dah ada di shift, next shift
             }
         }
     }
-    
-    return count;
+
+    return jumlah_shift;
 }
+
 
 void tampilkanJadwalHarian(Shift jadwal[], int hari) {
     if (hari < 0 || hari >= 30) {
@@ -49,31 +54,42 @@ void tampilkanJadwalHarian(Shift jadwal[], int hari) {
     printf("\n");
 }
 
+// berapa kali tiap dokter ditugaskan kerja di semua shift
 void tampilkanJumlahShiftDokter(Shift jadwal[], Dokter daftar_dokter[], int jumlah_dokter) {
+    // belum ada dokter, exit
     if (jumlah_dokter <= 0) {
         printf("Tidak ada dokter untuk ditampilkan statistiknya.\n");
         return;
     }
 
+    // init array
     int *jumlah_shift = calloc(jumlah_dokter, sizeof(int));
     if (!jumlah_shift) {
+        // if gagal
         printf("Error: Gagal mengalokasikan memori.\n");
         return;
     }
 
+    // loop tiap shift
     for (int i = 0; i < TOTAL_SHIFT; i++) {
+        // loop semua dokter di shift
         for (int j = 0; j < jadwal[i].jumlah_dokter; j++) {
+            // pastikan ada dokter
             if (jadwal[i].dokter_bertugas[j] != NULL) {
+                // cek dokternya dimana
                 for (int k = 0; k < jumlah_dokter; k++) {
+                    // bandingkan dengan pointer
                     if (jadwal[i].dokter_bertugas[j] == &daftar_dokter[k]) {
+                        // tambah jumlah shift dia
                         jumlah_shift[k]++;
-                        break;
+                        break; // break 
                     }
                 }
             }
         }
     }
 
+    // hasil hitung
     printf("\nJumlah Shift per Dokter:\n");
     printf("========================\n");
     for (int i = 0; i < jumlah_dokter; i++) {
@@ -81,37 +97,49 @@ void tampilkanJumlahShiftDokter(Shift jadwal[], Dokter daftar_dokter[], int juml
     }
     printf("\n");
 
+    // free memori
     free(jumlah_shift);
 }
 
+
+// jumlah pelanggaran preferensi shift per dokter
 void tampilkanPelanggaranPreferensiPerDokter(Shift jadwal[], Dokter daftar_dokter[], int jumlah_dokter) {
+    // alokasi memori
     int *pelanggaran = calloc(jumlah_dokter, sizeof(int));
     if (!pelanggaran) {
         printf("Error: Gagal mengalokasikan memori.\n");
         return;
     }
 
+    // loop tiap shift
     for (int i = 0; i < TOTAL_SHIFT; i++) {
+        // loop per dokter
         for (int j = 0; j < jadwal[i].jumlah_dokter; j++) {
             Dokter* d = jadwal[i].dokter_bertugas[j];
+            
+            // kalau ada dokter
             if (d) {
+                // cari dokter
                 for (int k = 0; k < jumlah_dokter; k++) {
                     if (d == &daftar_dokter[k]) {
+                        // sesuaikan dgn preferensi
+
                         if ((strcmp(jadwal[i].tipe_shift, "Pagi") == 0 && d->pref_pagi == 0) ||
                             (strcmp(jadwal[i].tipe_shift, "pagi") == 0 && d->pref_pagi == 0) ||
                             (strcmp(jadwal[i].tipe_shift, "Siang") == 0 && d->pref_siang == 0) ||
                             (strcmp(jadwal[i].tipe_shift, "siang") == 0 && d->pref_siang == 0) ||
                             (strcmp(jadwal[i].tipe_shift, "Malam") == 0 && d->pref_malam == 0) ||
                             (strcmp(jadwal[i].tipe_shift, "malam") == 0 && d->pref_malam == 0)) {
-                            pelanggaran[k]++;
+                            pelanggaran[k]++;  // tambah pelanggaran
                         }
-                        break;
+                        break; // next
                     }
                 }
             }
         }
     }
 
+    // output
     printf("\nPelanggaran Preferensi per Dokter:\n");
     printf("==================================\n");
     for (int i = 0; i < jumlah_dokter; i++) {
@@ -119,8 +147,10 @@ void tampilkanPelanggaranPreferensiPerDokter(Shift jadwal[], Dokter daftar_dokte
     }
     printf("\n");
 
+    // free memori
     free(pelanggaran);
 }
+
 
 void simpanJadwalKeCSV(Shift jadwal[], const char* nama_file) {
     FILE *f = fopen(nama_file, "w");

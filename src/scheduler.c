@@ -69,21 +69,21 @@ void displayEnhancedMenu() {
     printf("[1] Manajemen Data Dokter\n");
     printf("    - Tambah, hapus, dan lihat dokter\n");
     printf("    - Impor dan ekspor data dokter dari/ke CSV\n\n");
-    printf("[2] Buat Jadwal Otomatis\n");
+    printf("\n[2] Buat Jadwal Otomatis\n");
     printf("    - Buat jadwal 30 hari dengan 3 shift per hari\n\n");
-    printf("[3] Tampilkan Jadwal Harian\n");
-    printf("[4] Tampilkan Jadwal Mingguan\n");
-    printf("[5] Tampilkan Jadwal Bulanan\n\n");
-    printf("[6] Statistik dan Analisis Jadwal\n");
+    printf("\n[3] Tampilkan Jadwal Harian\n");
+    printf("\n[4] Tampilkan Jadwal Mingguan\n");
+    printf("\n[5] Tampilkan Jadwal Bulanan\n\n");
+    printf("\n[6] Statistik dan Analisis Jadwal\n");
     printf("    - Lihat jumlah shift per dokter\n");
     printf("    - Analisis distribusi dan keadilan jadwal\n");
     printf("    - Lihat pelanggaran preferensi per dokter\n\n");
-    printf("[7] Simpan Jadwal ke File CSV\n");
-    printf("[8] Muat Jadwal dari File CSV\n");
-    printf("[9] Edit Jadwal Secara Manual\n");
-    printf("[10] Tampilkan Jadwal Per Dokter\n");
-    printf("[11] Pencarian\n\n");
-    printf("[0] Keluar dari Aplikasi\n\n");
+    printf("\n[7] Simpan Jadwal ke File CSV\n");
+    printf("\n[8] Muat Jadwal dari File CSV\n");
+    printf("\n[9] Edit Jadwal Secara Manual\n");
+    printf("\n[10] Tampilkan Jadwal Per Dokter\n");
+    printf("\n[11] Pencarian\n\n");
+    printf("\n[0] Keluar dari Aplikasi\n\n");
     printLine('-', 60);
     printf("Masukkan pilihan Anda (0-11): ");
 }
@@ -442,10 +442,10 @@ void doctorManagementMenu(Dokter daftar[], int *jumlah) {
 
                 maks_shift = getIntInput(1, 21, "Maksimal shift per minggu (1-21): ");
                 printLine('-', 40);
-                printf("Preferensi shift (1=ya, 0=tidak):\n");
-                pref_pagi = getIntInput(0, 1, "Shift pagi (1=ya, 0=tidak): ");
-                pref_siang = getIntInput(0, 1, "Shift siang (1=ya, 0=tidak): ");
-                pref_malam = getIntInput(0, 1, "Shift malam (1=ya, 0=tidak): ");
+                printf("Preferensi shift (1 = Ya, 0 = Tidak):\n");
+                pref_pagi = getIntInput(0, 1, "Shift pagi (1 = Ya, 0 = Tidak): ");
+                pref_siang = getIntInput(0, 1, "Shift siang (1 = Ya, 0 = Tidak): ");
+                pref_malam = getIntInput(0, 1, "Shift malam (1 = Ya, 0 = Tidak): ");
 
                 if (pref_pagi == 0 && pref_siang == 0 && pref_malam == 0) {
                     printColored("Error: Dokter harus memiliki minimal satu preferensi shift.\n");

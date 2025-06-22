@@ -1,13 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#define SLEEP(ms) Sleep(ms)
+#else
 #include <unistd.h>
+#define SLEEP(ms) usleep((ms) * 1000)
+#endif
+
 #include "../include/types.h"
 #include "../include/doctor_manager.h"
 #include "../include/scheduler.h"
 #include "../include/display.h"
 #include "../include/utils.h"
-#define SCHEDULE_FILE "../data/jadwal.csv"
+
+#define SCHEDULE_FILE "../data/sample/jadwal_dokter.csv"
 
 void displaySplashScreen() {
     clearScreen();
@@ -38,18 +47,18 @@ void displaySplashScreen() {
     printf("\n");
     printf("                           For Pak Hilton                            \n");
     printf("\n\n");
-    
+
     printf("                           Loading system");
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             printf(".");
             fflush(stdout);
-            usleep(300000); 
+            SLEEP(300); // 300ms
         }
         printf("\b\b\b   \b\b\b");
         fflush(stdout);
     }
-    
+
     printf("\n\n                      Press Enter to continue...");
     getchar();
 }

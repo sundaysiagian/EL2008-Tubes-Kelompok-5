@@ -9,8 +9,8 @@
 #include "../include/display.h"
 #include "../include/utils.h"
 
-#define DOCTORS_FILE "data/doctors.csv"
-#define SCHEDULE_FILE "data/schedule.csv"
+#define DOCTORS_FILE "data/sample/daftar_dokter.csv"
+#define SCHEDULE_FILE "data/sample/jadwal_dokter.csv"
 
 int getIntInput(int min, int max, const char* prompt) {
     int value;
@@ -285,14 +285,14 @@ int bacaJadwalDariCSV(Shift jadwal[], const char* nama_file, Dokter daftar_dokte
         char *token;
         char *rest = line;
         
-        token = strtok_r(rest, ",", &rest);
+        token = strtok(rest, ",");
         if (!token) {
             printf("Warning: Format tidak valid pada baris %d\n", line_count);
             continue;
         }
         int hari = atoi(token) - 1; 
         
-        token = strtok_r(rest, ",", &rest);
+        token = strtok(rest, ",");
         if (!token) {
             printf("Warning: Format tidak valid pada baris %d\n", line_count);
             continue;
@@ -315,13 +315,13 @@ int bacaJadwalDariCSV(Shift jadwal[], const char* nama_file, Dokter daftar_dokte
         
         int idx = hari * 3 + shift_index;
         
-        token = strtok_r(rest, ",", &rest);
+        token = strtok(rest, ",");
         if (!token) {
             printf("Warning: Format tidak valid pada baris %d\n", line_count);
             continue;
         }
         
-        token = strtok_r(rest, ",", &rest);
+        token = strtok(rest, ",");
         if (!token) {
             printf("Warning: Format tidak valid pada baris %d\n", line_count);
             continue;

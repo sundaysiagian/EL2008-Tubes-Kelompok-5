@@ -1,0 +1,16 @@
+- Masih bikin tabelnya berantakan 
+Dr. VeryLongNameThatExceedsNormalLength
+
+- Pastiin apakah negative, zero, non numeric memang dibuat jadi 5? Selain itu, kenapa 999 tetep 999? Normalize jadi 21
+Dr. Test, -1, 1, 1, 1 (Negative shifts)
+Dr. Test, 0, 1, 1, 1 (Zero shifts)
+Dr. Test, 999, 1, 1, 1 (Excessive shifts)
+Dr. Test, abc, 1, 1, 1 (Non-numeric)
+
+- Negative jadi Yes. 2 jadi Yes. Non-numeric jadi 0. Emang boleh tidak tidak tidak? 
+Dr. Test, 5, 2, 1, 1 (Invalid preference value)
+Dr. Test, 5, -1, 1, 1 (Negative preference)
+Dr. Test, 5, abc, 1, 1 (Non-numeric preference)
+Dr. Test, 5, 0, 0, 0 (No preferences at all)
+
+- 

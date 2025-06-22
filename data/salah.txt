@@ -1,0 +1,4 @@
+nama,max_shift,pref_pagi,pref_siang
+Dr. Kaka, 7, 1, 1, 1 
+Dr. Pirlo, 1, 1, 0, 0 
+Dr. Seedorf, 21, 0, 0, 1 

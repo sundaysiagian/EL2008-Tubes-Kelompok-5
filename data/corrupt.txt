@@ -1,0 +1,4 @@
+nama,maks_shift_mingguan,pref_pagi,pref_siang,pref_malam
+Dr. Smith,7,1,1,1
+Dr. Johnson,6,1,1
+Dr. Williams,invalid,data,here,x,y,z

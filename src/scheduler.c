@@ -67,23 +67,17 @@ void displayEnhancedMenu() {
     clearScreen();
     printf("\n=== RS SEMOGA SEHAT SELALU - SISTEM PENJADWALAN DOKTER ===\n\n");
     printf("[1] Manajemen Data Dokter\n");
-    printf("    - Tambah, hapus, dan lihat dokter\n");
-    printf("    - Impor dan ekspor data dokter dari/ke CSV\n\n");
-    printf("\n[2] Buat Jadwal Otomatis\n");
-    printf("    - Buat jadwal 30 hari dengan 3 shift per hari\n\n");
-    printf("\n[3] Tampilkan Jadwal Harian\n");
-    printf("\n[4] Tampilkan Jadwal Mingguan\n");
-    printf("\n[5] Tampilkan Jadwal Bulanan\n\n");
-    printf("\n[6] Statistik dan Analisis Jadwal\n");
-    printf("    - Lihat jumlah shift per dokter\n");
-    printf("    - Analisis distribusi dan keadilan jadwal\n");
-    printf("    - Lihat pelanggaran preferensi per dokter\n\n");
-    printf("\n[7] Simpan Jadwal ke File CSV\n");
-    printf("\n[8] Muat Jadwal dari File CSV\n");
-    printf("\n[9] Edit Jadwal Secara Manual\n");
-    printf("\n[10] Tampilkan Jadwal Per Dokter\n");
-    printf("\n[11] Pencarian\n\n");
-    printf("\n[0] Keluar dari Aplikasi\n\n");
+    printf("[2] Buat Jadwal Otomatis\n");
+    printf("[3] Tampilkan Jadwal Harian\n");
+    printf("[4] Tampilkan Jadwal Mingguan\n");
+    printf("[5] Tampilkan Jadwal Bulanan\n");
+    printf("[6] Statistik dan Analisis Jadwal\n");
+    printf("[7] Simpan Jadwal ke File CSV\n");
+    printf("[8] Muat Jadwal dari File CSV\n");
+    printf("[9] Edit Jadwal Secara Manual\n");
+    printf("[10] Tampilkan Jadwal Per Dokter\n");
+    printf("[11] Pencarian\n");
+    printf("[0] Keluar dari Aplikasi\n\n");
     printLine('-', 60);
     printf("Masukkan pilihan Anda (0-11): ");
 }
@@ -682,24 +676,47 @@ void tampilkanGrafikDistribusi(Shift jadwal[], Dokter daftar_dokter[], int jumla
 }
 
 void statistikJadwalMenu(Shift jadwal[], Dokter daftar_dokter[], int jumlah_dokter) {
-    printf("\n=== STATISTIK JADWAL ===\n");
-    printLine('-', 40);
-
-    tampilkanJumlahShiftDokter(jadwal, daftar_dokter, jumlah_dokter);
-    tampilkanDistribusiShift(jadwal, daftar_dokter, jumlah_dokter);
-    analisisKeadilan(jadwal, daftar_dokter, jumlah_dokter);
-
-    int pelanggaran = hitungPelanggaranPreferensi(jadwal);
-    printf("\nJumlah pelanggaran preferensi: ");
-    if (pelanggaran > 0) {
-        printf("%s", pelanggaran > 2 ? "TINGGI" : "RENDAH");
-        printf(" (%d)\n", pelanggaran);
-    } else {
-        printf("TIDAK ADA (0)\n");
+    while (1) {
+        clearScreen();
+        printf("\n=== MENU STATISTIK DAN ANALISIS ===\n");
+        printf("1. Tampilkan jumlah shift per dokter\n");
+        printf("2. Tampilkan distribusi shift\n");
+        printf("3. Analisis keadilan distribusi\n");
+        printf("4. Tampilkan pelanggaran preferensi\n");
+        printf("5. Validasi jadwal (komprehensif)\n");
+        printf("0. Kembali ke menu utama\n");
+        printLine('-', 40);
+        
+        int pilihan = getIntInput(0, 5, "Pilihan Anda: ");
+        
+        switch (pilihan) {
+            case 0:
+                return;
+            case 1:
+                clearScreen();
+                tampilkanJumlahShiftDokter(jadwal, daftar_dokter, jumlah_dokter);
+                break;
+            case 2:
+                clearScreen();
+                tampilkanDistribusiShift(jadwal, daftar_dokter, jumlah_dokter);
+                break;
+            case 3:
+                clearScreen();
+                analisisKeadilan(jadwal, daftar_dokter, jumlah_dokter);
+                break;
+            case 4:
+                clearScreen();
+                tampilkanPelanggaranPreferensiPerDokter(jadwal, daftar_dokter, jumlah_dokter);
+                break;
+            case 5:
+                clearScreen();
+                validasiJadwal(jadwal, daftar_dokter, jumlah_dokter);
+                break;
+        }
+        
+        printf("\nTekan Enter untuk melanjutkan...");
+        getchar();
     }
-
-    printf("\nTekan Enter untuk melanjutkan...");
-    getchar();
 }
 
 void inisialisasiJadwal(Shift jadwal[]) {
@@ -799,9 +816,31 @@ int buatJadwalOtomatis(Shift jadwal[], Dokter dokter[], int jumlah_dokter) {
     sprintf(prompt_buffer, "Masukkan jumlah dokter yang dibutuhkan per shift (1-%d): ", max_possible);
     int doctors_needed_per_shift = getIntInput(1, max_possible, prompt_buffer);
 
-    if (jumlah_dokter < 1) {
-        printf("Error: Jumlah dokter (%d) tidak mencukupi untuk membuat jadwal.\n", jumlah_dokter);
-        return 0;
+    printf("\nAnalisis Preferensi Dokter:\n");
+    int morning_only = 0, afternoon_only = 0, night_only = 0;
+    int morning_capable = 0, afternoon_capable = 0, night_capable = 0;
+    
+    for (int i = 0; i < jumlah_dokter; i++) {
+        if (dokter[i].pref_pagi) morning_capable++;
+        if (dokter[i].pref_siang) afternoon_capable++;
+        if (dokter[i].pref_malam) night_capable++;
+        
+        if (dokter[i].pref_pagi && !dokter[i].pref_siang && !dokter[i].pref_malam) morning_only++;
+        if (!dokter[i].pref_pagi && dokter[i].pref_siang && !dokter[i].pref_malam) afternoon_only++;
+        if (!dokter[i].pref_pagi && !dokter[i].pref_siang && dokter[i].pref_malam) night_only++;
+    }
+    
+    printf("- Dokter yang bisa shift pagi: %d\n", morning_capable);
+    printf("- Dokter yang bisa shift siang: %d\n", afternoon_capable);
+    printf("- Dokter yang bisa shift malam: %d\n", night_capable);
+    printf("- Dokter khusus pagi: %d\n", morning_only);
+    printf("- Dokter khusus siang: %d\n", afternoon_only);
+    printf("- Dokter khusus malam: %d\n", night_only);
+    
+    if (morning_capable < doctors_needed_per_shift || 
+        afternoon_capable < doctors_needed_per_shift || 
+        night_capable < doctors_needed_per_shift) {
+        printf("PERINGATAN: Ada shift yang tidak memiliki cukup dokter sesuai preferensi!\n");
     }
 
     printf("Membuat jadwal dengan minimal %d dokter per shift...\n", doctors_needed_per_shift);
@@ -810,15 +849,18 @@ int buatJadwalOtomatis(Shift jadwal[], Dokter dokter[], int jumlah_dokter) {
     if (solveJadwal(jadwal, 0, doctors_needed_per_shift, dokter, jumlah_dokter)) {
         endProgress("Jadwal berhasil dibuat!");
         
-        if (doctors_needed_per_shift > 1) {
-            printf("Mencoba menambahkan dokter tambahan ke shift yang masih kurang...\n");
-            for (int i = 0; i < TOTAL_SHIFT; i++) {
-                if (jadwal[i].jumlah_dokter < doctors_needed_per_shift) {
-                    printf("Shift %s hari %d: %d/%d dokter\n", 
-                           jadwal[i].tipe_shift, jadwal[i].hari_ke + 1,
-                           jadwal[i].jumlah_dokter, doctors_needed_per_shift);
-                }
+        int shifts_with_insufficient = 0;
+        for (int i = 0; i < TOTAL_SHIFT; i++) {
+            if (jadwal[i].jumlah_dokter < doctors_needed_per_shift) {
+                shifts_with_insufficient++;
             }
+        }
+        
+        if (shifts_with_insufficient > 0) {
+            printf("PERINGATAN: %d shift tidak mencapai target %d dokter per shift\n", 
+                   shifts_with_insufficient, doctors_needed_per_shift);
+        } else {
+            printf("BERHASIL: Semua shift memiliki minimal %d dokter\n", doctors_needed_per_shift);
         }
         
         return 1;

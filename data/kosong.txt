@@ -1,0 +1,1 @@
+nama,maks_shift_mingguan,pref_pagi,pref_siang,pref_malam

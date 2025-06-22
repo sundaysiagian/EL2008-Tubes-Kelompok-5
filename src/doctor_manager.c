@@ -134,7 +134,6 @@ int bacaDokterDariCSV(const char *filename, Dokter daftar[], int *jumlah) {
             daftar[*jumlah].maks_shift_mingguan = 5;
         } else {
             int temp_shift = atoi(token);
-            // Validate and normalize shift values
             if (temp_shift < 1) {
                 printf("Warning: Maks shift tidak valid pada baris %d (%d), menggunakan nilai 5.\n", line_num, temp_shift);
                 daftar[*jumlah].maks_shift_mingguan = 5;
@@ -146,14 +145,57 @@ int bacaDokterDariCSV(const char *filename, Dokter daftar[], int *jumlah) {
             }
         }
 
+                // Process preferences with proper validation
         token = strtok(NULL, ",");
-        daftar[*jumlah].pref_pagi = token ? atoi(token) : 1;
+        if (!token) {
+            printf("Warning: Preferensi pagi tidak ada pada baris %d, menggunakan nilai 0.\n", line_num);
+            daftar[*jumlah].pref_pagi = 0;
+        } else {
+            char *endptr;
+            long pref_val = strtol(token, &endptr, 10);
+            if (*endptr != '\0') {
+                printf("Warning: Preferensi pagi tidak valid pada baris %d (%s), menggunakan nilai 0.\n", line_num, token);
+                daftar[*jumlah].pref_pagi = 0;
+            } else {
+                daftar[*jumlah].pref_pagi = (pref_val > 0) ? 1 : 0;
+            }
+        }
+        
         token = strtok(NULL, ",");
-        daftar[*jumlah].pref_siang = token ? atoi(token) : 1;
+        if (!token) {
+            printf("Warning: Preferensi siang tidak ada pada baris %d, menggunakan nilai 0.\n", line_num);
+            daftar[*jumlah].pref_siang = 0;
+        } else {
+            char *endptr;
+            long pref_val = strtol(token, &endptr, 10);
+            if (*endptr != '\0') {
+                printf("Warning: Preferensi siang tidak valid pada baris %d (%s), menggunakan nilai 0.\n", line_num, token);
+                daftar[*jumlah].pref_siang = 0;
+            } else {
+                daftar[*jumlah].pref_siang = (pref_val > 0) ? 1 : 0;
+            }
+        }
+        
         token = strtok(NULL, ",");
-        daftar[*jumlah].pref_malam = token ? atoi(token) : 1;
+        if (!token) {
+            printf("Warning: Preferensi malam tidak ada pada baris %d, menggunakan nilai 0.\n", line_num);
+            daftar[*jumlah].pref_malam = 0;
+        } else {
+            char *endptr;
+            long pref_val = strtol(token, &endptr, 10);
+            if (*endptr != '\0') {
+                printf("Warning: Preferensi malam tidak valid pada baris %d (%s), menggunakan nilai 0.\n", line_num, token);
+                daftar[*jumlah].pref_malam = 0;
+            } else {
+                daftar[*jumlah].pref_malam = (pref_val > 0) ? 1 : 0;
+            }
+        }
 
-        (*jumlah)++;
+        if (daftar[*jumlah].pref_pagi == 0 && daftar[*jumlah].pref_siang == 0 && daftar[*jumlah].pref_malam == 0) {
+            printf("Error: Dokter %s pada baris %d tidak memiliki preferensi shift sama sekali. Data diabaikan.\n", 
+                   daftar[*jumlah].nama, line_num);
+            continue; 
+        }
     }
 
     if (*jumlah == MAX_DOCTORS && !feof(file)) {

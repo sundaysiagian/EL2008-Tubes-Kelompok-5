@@ -399,3 +399,96 @@ int hitungPelanggaranPreferensi(Shift jadwal[]) {
 
     return pelanggaran;
 }
+
+void validasiJadwal(Shift jadwal[], Dokter daftar_dokter[], int jumlah_dokter) {
+    printf("\n=== VALIDASI JADWAL ===\n");
+    printLine('-', 50);
+    
+    int violations = 0;
+    int errors = 0;
+    
+    // Cek 1: Memastikan tidak ada dokter yang melebihi batas maksimal shift per minggu
+    printf("1. Memeriksa batas maksimal shift per minggu...\n");
+    for (int minggu = 0; minggu < 5; minggu++) {
+        for (int i = 0; i < jumlah_dokter; i++) {
+            int shift_count = hitungShiftMingguIni(jadwal, &daftar_dokter[i], minggu);
+            if (shift_count > daftar_dokter[i].maks_shift_mingguan) {
+                printf("   ERROR: %s melebihi batas (Minggu %d: %d/%d shift)\n", 
+                       daftar_dokter[i].nama, minggu + 1, shift_count, 
+                       daftar_dokter[i].maks_shift_mingguan);
+                errors++;
+            }
+        }
+    }
+    if (errors == 0) printf("   ✓ Semua dokter dalam batas maksimal shift\n");
+
+    // Cek 2: Memeriksa pelanggaran preferensi  
+    printf("2. Memeriksa pelanggaran preferensi...\n");
+    for (int i = 0; i < TOTAL_SHIFT; i++) {
+        for (int j = 0; j < jadwal[i].jumlah_dokter; j++) {
+            Dokter* d = jadwal[i].dokter_bertugas[j];
+            if (d) {
+                if ((strcmp(jadwal[i].tipe_shift, "pagi") == 0 && d->pref_pagi == 0) ||
+                    (strcmp(jadwal[i].tipe_shift, "siang") == 0 && d->pref_siang == 0) ||
+                    (strcmp(jadwal[i].tipe_shift, "malam") == 0 && d->pref_malam == 0)) {
+                    printf("   VIOLATION: %s ditempatkan di shift %s (Hari %d) tanpa preferensi\n",
+                           d->nama, jadwal[i].tipe_shift, jadwal[i].hari_ke + 1);
+                    violations++;
+                }
+            }
+        }
+    }
+    if (violations == 0) printf("   ✓ Semua penempatan sesuai preferensi\n");
+    
+    // Cek 3: Memeriksa cakupan minimal per shift
+    printf("3. Memeriksa cakupan minimal per shift...\n");
+    int uncovered_shifts = 0;
+    for (int i = 0; i < TOTAL_SHIFT; i++) {
+        if (jadwal[i].jumlah_dokter == 0) {
+            printf("   WARNING: Shift %s Hari %d tidak ada dokter\n",
+                   jadwal[i].tipe_shift, jadwal[i].hari_ke + 1);
+            uncovered_shifts++;
+        }
+    }
+    if (uncovered_shifts == 0) printf("   ✓ Semua shift memiliki minimal 1 dokter\n");
+    
+    // Cek 4: Memeriksa double booking (dokter yang sama di beberapa shift pada hari yang sama)
+    printf("4. Memeriksa konflik jadwal...\n");
+    int conflicts = 0;
+    for (int hari = 0; hari < 30; hari++) {
+        for (int i = 0; i < jumlah_dokter; i++) {
+            int shifts_today = 0;
+            for (int shift = 0; shift < 3; shift++) {
+                int idx = hari * 3 + shift;
+                for (int j = 0; j < jadwal[idx].jumlah_dokter; j++) {
+                    if (jadwal[idx].dokter_bertugas[j] == &daftar_dokter[i]) {
+                        shifts_today++;
+                    }
+                }
+            }
+            if (shifts_today > 1) {
+                printf("   CONFLICT: %s terjadwal %d shift di Hari %d\n",
+                       daftar_dokter[i].nama, shifts_today, hari + 1);
+                conflicts++;
+            }
+        }
+    }
+    if (conflicts == 0) printf("   ✓ Tidak ada konflik jadwal\n");
+    
+    // Ringkasan
+    printf("\n=== RINGKASAN VALIDASI ===\n");
+    printf("Errors (pelanggaran batas): %d\n", errors);
+    printf("Violations (pelanggaran preferensi): %d\n", violations);
+    printf("Conflicts (konflik jadwal): %d\n", conflicts);
+    printf("Uncovered shifts: %d\n", uncovered_shifts);
+    
+    if (errors == 0 && conflicts == 0) {
+        printf("STATUS: JADWAL VALID ✓\n");
+    } else {
+        printf("STATUS: JADWAL TIDAK VALID ✗\n");
+    }
+    
+    if (violations > 0) {
+        printf("CATATAN: Ada pelanggaran preferensi (dapat ditoleransi)\n");
+    }
+}

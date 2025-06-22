@@ -11,6 +11,7 @@
 
 #define DOCTORS_FILE "data/sample/daftar_dokter.csv"
 #define SCHEDULE_FILE "data/sample/jadwal_dokter.csv"
+#define LOAD_DOCTORS_FILE "data/doctors.csv"
 
 int getIntInput(int min, int max, const char* prompt) {
     int value;
@@ -488,10 +489,10 @@ void doctorManagementMenu(Dokter daftar[], int *jumlah) {
             case 4:
                 clearScreen();
                 printf("\n=== MUAT DATA DARI CSV ===\n");
-                printf("Data akan dimuat dari file: %s\n", DOCTORS_FILE);
+                printf("Data akan dimuat dari file: %s\n", LOAD_DOCTORS_FILE);
                 if (confirmAction("Lanjutkan? Data dokter saat ini akan diganti")) {
                     startProgress("Memuat data dari CSV...");
-                    if (bacaDokterDariCSV(DOCTORS_FILE, daftar, jumlah)) {
+                    if (bacaDokterDariCSV(LOAD_DOCTORS_FILE, daftar, jumlah)) {
                         endProgress("Berhasil memuat data dari CSV");
                     } else {
                         endProgress("Gagal memuat data dari CSV");

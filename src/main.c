@@ -100,7 +100,7 @@ int main() {
                 if (confirmAction("Buat jadwal otomatis dengan data dokter di atas")) {
                     if (buatJadwalOtomatis(jadwal, daftar_dokter, jumlah_dokter)) {
                         jadwal_dibuat = 1;
-                        printf("\nJadwal berhasil dibuat!\n");
+                        printf("\n==============\n");
                     } else {
                         printf("\nGagal membuat jadwal. Mohon periksa data dokter.\n");
                     }

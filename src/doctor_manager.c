@@ -1,138 +1,73 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
+#include "../include/types.h"
+#include "../include/doctor_manager.h"
+#include "../include/utils.h"
 
-#define MAX_NAMA 50
-#define MAX_DOKTER 100
-
-// biar sama
-typedef struct {
-    char nama[MAX_NAMA];    /* nama dokter */
-    int max_shift;          
-    int pref_pagi;  // 1 = mau, 0 = ga mau
-    int pref_siang;  
-    int pref_malam;       
-} Dokter;
-
-Dokter dokter[MAX_DOKTER];
-int sum_dokter = 0;
-
-// baca file daftar_dokter.csv
-void read_csv(const char *filename) {
-    FILE *file = fopen(filename, "r");
-    if (!file) {
-        printf("File %s tidak ditemukan. Data dokter kosong.\n", filename);
-        return;
-    }
-    char line[256];
-    fgets(line, sizeof(line), file); // skip header
-
-    while (fgets(line, sizeof(line), file) && sum_dokter < MAX_DOKTER) {
-        char *token;
-        
-        token = strtok(line, ",");
-        if (token) strncpy(dokter[sum_dokter].nama, token, MAX_NAMA - 1);
-        
-        token = strtok(NULL, ",");
-        if (token) dokter[sum_dokter].max_shift = atoi(token);
-        
-        token = strtok(NULL, ",");
-        if (token) dokter[sum_dokter].pref_pagi = atoi(token);
-        
-        token = strtok(NULL, ",");
-        if (token) dokter[sum_dokter].pref_siang = atoi(token);
-
-        token = strtok(NULL, ",");
-        if (token) dokter[sum_dokter].pref_malam = atoi(token);
-        
-        sum_dokter++;
-    }
-    fclose(file);
-    printf("Data dokter dari %s berhasil dimuat.\n", filename);
-}
-
-// Simpan 5 kolom ke CSV
-void simpanCSV(const char *filename) {
-    FILE *file = fopen(filename, "w");
-    if (!file) {
-        printf("Gagal membuka file %s\n", filename);
+void tambahDokter(Dokter daftar[], int *jumlah, const char *nama, int maks_shift, int pref_pagi, int pref_siang, int pref_malam) {
+    if (nama == NULL || strlen(nama) == 0) {
+        printf("Error: Nama dokter tidak boleh kosong.\n");
         return;
     }
 
-    // ini buat header
-    fprintf(file, "Nama,Maksimal Shift,Pref Pagi,Pref Siang,Pref Malam\n");
-
-    for (int i = 0; i < sum_dokter; i++) {
-        // buat tulis perkolomm
-        fprintf(file, "%s,%d,%d,%d,%d\n",
-                dokter[i].nama,
-                dokter[i].max_shift,
-                dokter[i].pref_pagi,
-                dokter[i].pref_siang,
-                dokter[i].pref_malam);
-    }
-    fclose(file);
-    printf("Data berhasil disimpan ke %s\n", filename);
-}
-
-// input
-void tambahDokter() {
-    int a;
-    if (sum_dokter >= MAX_DOKTER) {
-        printf("Kapasitas dokter penuh!\n");
+    if (maks_shift < 1) {
+        printf("Error: Maksimal shift harus minimal 1.\n");
         return;
     }
 
-    printf("Masukkan nama dokter: ");
-    getchar(); // Membersihkan buffer stdin
-    fgets(dokter[sum_dokter].nama, MAX_NAMA, stdin);
-    dokter[sum_dokter].nama[strcspn(dokter[sum_dokter].nama, "\n")] = 0;
+    if (*jumlah >= MAX_DOCTORS) {
+        printf("Error: Kapasitas dokter penuh!\n");
+        return;
+    }
 
-    printf("Masukkan maksimal shift per minggu: ");
-    scanf("%d", &dokter[sum_dokter].max_shift);
+    for (int i = 0; i < *jumlah; i++) {
+        if (strcmp(daftar[i].nama, nama) == 0) {
+            printf("Error: Dokter dengan nama %s sudah ada.\n", nama);
+            return;
+        }
+    }
 
-    printf("Preferensi shift Pagi (1=Ya, 0=Tidak): ");
-    scanf("%d", &dokter[sum_dokter].pref_pagi);
-    
-    printf("Preferensi shift Siang (1=Ya, 0=Tidak): ");
-    scanf("%d", &dokter[sum_dokter].pref_siang);
+    strncpy(daftar[*jumlah].nama, nama, 49);
+    daftar[*jumlah].nama[49] = '\0';
+    daftar[*jumlah].maks_shift_mingguan = maks_shift;
+    daftar[*jumlah].pref_pagi = pref_pagi ? 1 : 0;
+    daftar[*jumlah].pref_siang = pref_siang ? 1 : 0;
+    daftar[*jumlah].pref_malam = pref_malam ? 1 : 0;
 
-    printf("Preferensi shift Malam (1=Ya, 0=Tidak): ");
-    scanf("%d", &dokter[sum_dokter].pref_malam);
-
-    sum_dokter++;
-    printf("Dokter berhasil ditambahkan.\n");
+    (*jumlah)++;
+    printf("Dokter %s berhasil ditambahkan.\n", nama);
 }
 
-void hapusDokter() {
-    char nama[MAX_NAMA];
-    printf("Masukkan nama dokter yang akan dihapus: ");
-    getchar();
-    fgets(nama, MAX_NAMA, stdin);
-    nama[strcspn(nama, "\n")] = 0;
+void hapusDokter(Dokter daftar[], int *jumlah, const char *nama) {
+    if (nama == NULL || strlen(nama) == 0) {
+        printf("Error: Nama dokter tidak boleh kosong.\n");
+        return;
+    }
 
     int found_index = -1;
-    for (int i = 0; i < sum_dokter; i++) {
-        if (strcmp(dokter[i].nama, nama) == 0) {
+
+    for (int i = 0; i < *jumlah; i++) {
+        if (strcmp(daftar[i].nama, nama) == 0) {
             found_index = i;
             break;
         }
     }
 
     if (found_index != -1) {
-        for (int i = found_index; i < sum_dokter - 1; i++) {
-            dokter[i] = dokter[i + 1];
+        for (int i = found_index; i < *jumlah - 1; i++) {
+            daftar[i] = daftar[i + 1];
         }
-        sum_dokter--;
+        (*jumlah)--;
         printf("Dokter %s berhasil dihapus.\n", nama);
     } else {
-        printf("Dokter %s tidak ditemukan.\n", nama);
+        printf("Error: Dokter %s tidak ditemukan.\n", nama);
     }
 }
 
-// Buat nampilin
-void tampilkanDokter() {
-    if (sum_dokter == 0) {
+void tampilkanDaftarDokter(Dokter daftar[], int jumlah) {
+    if (jumlah == 0) {
         printf("Belum ada data dokter.\n");
         return;
     }
@@ -141,55 +76,112 @@ void tampilkanDokter() {
     printf("%-20s | %-10s | %-10s | %-10s | %-10s\n", "Nama", "Maks Shift", "Pagi", "Siang", "Malam");
     printf("======================================================================\n");
 
-    for (int i = 0; i < sum_dokter; i++) {
+    for (int i = 0; i < jumlah; i++) {
         printf("%-20s | %-10d | %-10s | %-10s | %-10s\n",
-               dokter[i].nama,
-               dokter[i].max_shift,
-               dokter[i].pref_pagi ? "Ya" : "Tidak",  // Menggunakan ternary operator
-               dokter[i].pref_siang ? "Ya" : "Tidak", // untuk tampilan yang lebih baik
-               dokter[i].pref_malam ? "Ya" : "Tidak");
+               daftar[i].nama,
+               daftar[i].maks_shift_mingguan,
+               daftar[i].pref_pagi ? "Ya" : "Tidak",
+               daftar[i].pref_siang ? "Ya" : "Tidak",
+               daftar[i].pref_malam ? "Ya" : "Tidak");
     }
     printf("======================================================================\n");
 }
 
-int main() {
-    // Ganti nama file agar tidak bentrok dengan file jadwal nanti
-    const char *filename = "../../data/sample/daftar_dokter.csv";
-    read_csv(filename);
+int bacaDokterDariCSV(const char *filename, Dokter daftar[], int *jumlah) {
+    FILE *file = fopen(filename, "r");
+    if (!file) {
+        printf("Error: File %s tidak ditemukan atau tidak bisa dibuka.\n", filename);
+        return 0;
+    }
 
-    int pilihan;
-    do {
-        printf("\n--- Manajemen Data Dokter ---\n");
-        printf("1. Tambah Dokter\n");
-        printf("2. Hapus Dokter\n");
-        printf("3. Tampilkan Dokter\n");
-        printf("4. Simpan dan Keluar\n");
-        printf("Pilih opsi: ");
+    char line[256];
+    if (!fgets(line, sizeof(line), file)) {
+        printf("Error: Format file CSV tidak valid (header tidak ditemukan).\n");
+        fclose(file);
+        return 0;
+    }
 
-        int hasil_scan = scanf("%d", &pilihan);
+    *jumlah = 0;
+    int line_num = 1;
 
-        // biar cuman integer ajah
-        if (hasil_scan != 1) {
-            while (getchar() != '\n'); 
-            pilihan = 0;
-            printf("Pilihan tidak valid.\n");
-        }
-        else {
-            switch (pilihan) {
-            case 1: tambahDokter(); break;
-            case 2: hapusDokter(); break;
-            case 3: tampilkanDokter(); break;
-            case 4: 
-                simpanCSV(filename);
-                return 0; // Keluar dari program
-            default: 
-                printf("Pilihan tidak valid.\n");
+    while (fgets(line, sizeof(line), file) && *jumlah < MAX_DOCTORS) {
+        line_num++;
+        line[strcspn(line, "\n")] = 0;
+
+        if (strlen(trimString(line)) == 0) continue;
+
+        char *token = strtok(line, ",");
+        if (!token) {
+            printf("Warning: Format data tidak valid pada baris %d, melewati...\n", line_num);
+            continue;
         }
 
+        strncpy(daftar[*jumlah].nama, token, 49);
+        daftar[*jumlah].nama[49] = '\0';
+
+        token = strtok(NULL, ",");
+        if (!token) {
+            printf("Warning: Data tidak lengkap pada baris %d, menggunakan nilai default.\n", line_num);
+            daftar[*jumlah].maks_shift_mingguan = 5;
+        } else {
+            daftar[*jumlah].maks_shift_mingguan = atoi(token);
+            if (daftar[*jumlah].maks_shift_mingguan < 1) {
+                printf("Warning: Maks shift tidak valid pada baris %d, menggunakan nilai 5.\n", line_num);
+                daftar[*jumlah].maks_shift_mingguan = 5;
+            }
         }
 
-        
-    } while (1);
+        token = strtok(NULL, ",");
+        daftar[*jumlah].pref_pagi = token ? atoi(token) : 1;
+        token = strtok(NULL, ",");
+        daftar[*jumlah].pref_siang = token ? atoi(token) : 1;
+        token = strtok(NULL, ",");
+        daftar[*jumlah].pref_malam = token ? atoi(token) : 1;
 
-    return 0;
+        (*jumlah)++;
+    }
+
+    if (*jumlah == MAX_DOCTORS && !feof(file)) {
+        printf("Warning: Jumlah dokter melebihi kapasitas. Hanya %d dokter pertama yang dimuat.\n", MAX_DOCTORS);
+    }
+
+    fclose(file);
+    return 1;
+}
+
+int simpanDokterKeCSV(const char *filename, Dokter daftar[], int jumlah) {
+    FILE *file = fopen(filename, "w");
+    if (!file) {
+        printf("Error: Gagal membuka file %s untuk disimpan.\n", filename);
+        return 0;
+    }
+
+    if (fprintf(file, "Nama,Maksimal Shift,Pref Pagi,Pref Siang,Pref Malam\n") < 0) {
+        printf("Error: Gagal menulis data ke file.\n");
+        fclose(file);
+        return 0;
+    }
+
+    int success = 1;
+    for (int i = 0; i < jumlah; i++) {
+        if (fprintf(file, "%s,%d,%d,%d,%d\n",
+                daftar[i].nama,
+                daftar[i].maks_shift_mingguan,
+                daftar[i].pref_pagi,
+                daftar[i].pref_siang,
+                daftar[i].pref_malam) < 0) {
+            
+            printf("Error: Gagal menulis data ke file.\n");
+            success = 0;
+            break;
+        }
+    }
+
+    fclose(file);
+
+    if (success) {
+        printf("Data %d dokter berhasil disimpan ke %s\n", jumlah, filename);
+    }
+
+    return success;
 }

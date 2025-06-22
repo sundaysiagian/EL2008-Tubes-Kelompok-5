@@ -77,8 +77,17 @@ void tampilkanDaftarDokter(Dokter daftar[], int jumlah) {
     printf("======================================================================\n");
 
     for (int i = 0; i < jumlah; i++) {
+        char truncated_name[21];
+        strncpy(truncated_name, daftar[i].nama, 20);
+        truncated_name[20] = '\0';
+        
+        // If name was truncated, add "..." at the end
+        if (strlen(daftar[i].nama) > 20) {
+            strcpy(truncated_name + 17, "...");
+        }
+        
         printf("%-20s | %-10d | %-10s | %-10s | %-10s\n",
-               daftar[i].nama,
+               truncated_name,
                daftar[i].maks_shift_mingguan,
                daftar[i].pref_pagi ? "Ya" : "Tidak",
                daftar[i].pref_siang ? "Ya" : "Tidak",

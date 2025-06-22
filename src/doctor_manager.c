@@ -133,10 +133,16 @@ int bacaDokterDariCSV(const char *filename, Dokter daftar[], int *jumlah) {
             printf("Warning: Data tidak lengkap pada baris %d, menggunakan nilai default.\n", line_num);
             daftar[*jumlah].maks_shift_mingguan = 5;
         } else {
-            daftar[*jumlah].maks_shift_mingguan = atoi(token);
-            if (daftar[*jumlah].maks_shift_mingguan < 1) {
-                printf("Warning: Maks shift tidak valid pada baris %d, menggunakan nilai 5.\n", line_num);
+            int temp_shift = atoi(token);
+            // Validate and normalize shift values
+            if (temp_shift < 1) {
+                printf("Warning: Maks shift tidak valid pada baris %d (%d), menggunakan nilai 5.\n", line_num, temp_shift);
                 daftar[*jumlah].maks_shift_mingguan = 5;
+            } else if (temp_shift > 21) {
+                printf("Warning: Maks shift terlalu tinggi pada baris %d (%d), dinormalisasi ke 21.\n", line_num, temp_shift);
+                daftar[*jumlah].maks_shift_mingguan = 21;
+            } else {
+                daftar[*jumlah].maks_shift_mingguan = temp_shift;
             }
         }
 

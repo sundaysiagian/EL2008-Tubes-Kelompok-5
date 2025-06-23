@@ -18,7 +18,7 @@
 - **June 20**: Program final + mulai dokumentasi (laporan, ppt)
 - **June 23**: Siap dikumpul by jam 18.00 WIB
 
-## Prompt bikin FC
+## Prompt bikin FC (copas + gabungin kode yg mau dibuat flowchartnya)
 hi, please analyse the code im about to give you. i need it in designing a flowchart--all by myself. so i need you to be DETAILED and CLEAR on what to do. be SUPER CONCISE with your response and dont OVEREXPLAIN. use bahasa indonesia to make my workflow faster (as its my mother tongue). lets try with this:
 
 You are a helpful AI assistant. Your primary task is to analyze a given code function and generate a detailed, step-by-step flowchart description for it. Your entire response must be written in Bahasa Indonesia. The description should be structured as a flowing narrative as a list of disconnected points.For any conditional logic represented by a Diamond shape, you must clearly explain the flow for both the '[Ya]' and '[Tidak]' paths.

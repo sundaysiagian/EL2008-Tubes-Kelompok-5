@@ -4,12 +4,13 @@
 ## Shortcut
 | Jenis | Link |
 |----------|------|
-| 📋 Instruksi tubes | [Disini](Tugas-besar_PMP_242502.pdf) |
-| 🎯 Flowchart & DFD | [Disini](https://app.diagrams.net/#G1_eOto2H_pkk7bM0m83Z0DwhEoNhvrtpA) |
-| 🩼 Referensi 1 | [Avila K](https://github.com/AvlKP/EL2008-PMC-Tubes) |
-| 🩼 Referensi 2 | [Stefen S](https://github.com/StefenSutandi/Clinic-Management-using-GTK4) |
-| 🩼 Referensi 3 | [Falih R](https://github.com/falihrosyidi/TubesPMP-Kelompok6) |
-| 🩼 Referensi 4 | [Rifki A](https://github.com/Labpro-21/Employee-Shifting-Generator?tab=readme-ov-file) |
+| Instruksi tubes | [Disini](Tugas-besar_PMP_242502.pdf) |
+| Flowchart & DFD | [Disini](https://app.diagrams.net/#G1_eOto2H_pkk7bM0m83Z0DwhEoNhvrtpA) |
+| Referensi 1 | [Avila K](https://github.com/AvlKP/EL2008-PMC-Tubes) |
+| Referensi 2 | [Stefen S](https://github.com/StefenSutandi/Clinic-Management-using-GTK4) |
+| Referensi 3 | [Falih R](https://github.com/falihrosyidi/TubesPMP-Kelompok6) |
+| Referensi 4 | [Rifki A](https://github.com/Labpro-21/Employee-Shifting-Generator?tab=readme-ov-file) |
+| Tutorial bikin FC | [Disini](https://youtu.be/zEQy7YWC70Q) |
 
 ## Timeline
 - **June 13**: Tugas individu kelar

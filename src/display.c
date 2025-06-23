@@ -5,6 +5,7 @@
 #include <math.h>
 #include "../include/types.h"
 #include "../include/display.h"
+#include "../include/scheduler.h"
 
 // hitung berapa kali dokter ditaro di jadwal
 int hitungJumlahShiftDokter(Shift jadwal[], Dokter *target_dokter) {

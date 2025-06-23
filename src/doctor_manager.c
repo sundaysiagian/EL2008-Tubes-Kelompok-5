@@ -80,8 +80,6 @@ void tampilkanDaftarDokter(Dokter daftar[], int jumlah) {
         char truncated_name[21];
         strncpy(truncated_name, daftar[i].nama, 20);
         truncated_name[20] = '\0';
-        
-        // If name was truncated, add "..." at the end
         if (strlen(daftar[i].nama) > 20) {
             strcpy(truncated_name + 17, "...");
         }
@@ -145,7 +143,6 @@ int bacaDokterDariCSV(const char *filename, Dokter daftar[], int *jumlah) {
             }
         }
 
-                // Process preferences with proper validation
         token = strtok(NULL, ",");
         if (!token) {
             printf("Warning: Preferensi pagi tidak ada pada baris %d, menggunakan nilai 0.\n", line_num);
@@ -196,6 +193,7 @@ int bacaDokterDariCSV(const char *filename, Dokter daftar[], int *jumlah) {
                    daftar[*jumlah].nama, line_num);
             continue; 
         }
+        (*jumlah)++;
     }
 
     if (*jumlah == MAX_DOCTORS && !feof(file)) {

@@ -22,5 +22,6 @@ void preferensiMenu(UserPreferences *prefs, Dokter daftar_dokter[], int *jumlah_
 int simpanPreferensi(UserPreferences *prefs, const char *nama);
 int muatPreferensi(UserPreferences *prefs, const char *nama);
 void daftarPreferensi();
+void tampilkanPelanggaranPreferensiPerDokter(Shift jadwal[], Dokter daftar_dokter[], int jumlah_dokter);
 
 #endif

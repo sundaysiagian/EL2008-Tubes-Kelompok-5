@@ -393,6 +393,43 @@ void simpanJadwalKeCSV(Shift jadwal[], const char* nama_file) {
     }
 }
 
+int hitungShiftMingguIni(Shift jadwal[], Dokter *target_dokter, int minggu) {
+    int jumlah_shift_mingguan = 0;
+
+    // hari awal dan akhir
+    int hari_awal = minggu * 7;
+    int hari_akhir = hari_awal + 7;
+
+    if (hari_akhir > 30) {
+        hari_akhir = 30;
+    }
+
+    // loop di tiap hari
+    for (int hari = hari_awal; hari < hari_akhir; hari++) {
+        // loop per shift pagi, siang, mlm
+        for (int i = 0; i < 3; i++) {
+            int idx = hari * 3 + i; // hit index
+            
+            if (idx >= TOTAL_SHIFT) {
+                continue;
+            }// if melebihi batas
+
+            Shift shift_saat_ini = jadwal[idx];
+
+            // per dokter
+            for (int j = 0; j < shift_saat_ini.jumlah_dokter; j++) {
+                // cek apakah dokter yang bertugas adalah dokter target
+                if (shift_saat_ini.dokter_bertugas[j] == target_dokter) {
+                    jumlah_shift_mingguan++;
+                    break; // next shift
+                }
+            }
+        }
+    }
+    
+    return jumlah_shift_mingguan;
+}
+
 void validasiJadwal(Shift jadwal[], Dokter daftar_dokter[], int jumlah_dokter) {
     printf("\n=== VALIDASI JADWAL ===\n");
     printLine('-', 50); // Separator

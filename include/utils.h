@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+int getIntInput(int min, int max, const char* prompt);
 void clearScreen();
 void printLine(char sym, int length);
 char* trimString(char* str);

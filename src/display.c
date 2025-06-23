@@ -18,6 +18,29 @@ Fungsi:
 #include "../include/display.h"
 #include "../include/scheduler.h"
 
+void tampilkanJadwalPerDokter(Shift jadwal[], Dokter *dokter) {
+    printf("\nJadwal untuk dokter %s:\n", dokter->nama);
+    printf("=================================\n");
+    
+    int shift_count = 0;
+    
+    for (int i = 0; i < TOTAL_SHIFT; i++) {
+        for (int j = 0; j < jadwal[i].jumlah_dokter; j++) {
+            if (jadwal[i].dokter_bertugas[j] == dokter) {
+                printf("Hari %d, Shift %s\n", jadwal[i].hari_ke + 1, jadwal[i].tipe_shift);
+                shift_count++;
+                break;
+            }
+        }
+    }
+    
+    if (shift_count == 0) {
+        printf("Tidak ada jadwal untuk dokter ini.\n");
+    } else {
+        printf("\nTotal: %d shift\n", shift_count);
+    }
+}
+
 int hitungJumlahShiftDokter(Shift jadwal[], Dokter *target_dokter) {
     int jumlah_shift = 0; // Reset counter jml shift
 

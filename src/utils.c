@@ -1,9 +1,60 @@
+/*
+Program Utilitas
+Fungsi:
+1. Mengambil input integer dengan validasi rentang.
+2. Membersihkan layar.
+3. Mencetak garis pembatas.
+4. Memotong spasi pada string.
+5. Menampilkan spinner dan progress bar untuk operasi berjalan.
+6. Memulai dan mengakhiri progress dengan pesan.
+7. Meminta konfirmasi aksi dari pengguna.
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
 #include "../include/utils.h"
+
+int getIntInput(int min, int max, const char* prompt) {
+    int value;
+    char input[100];
+
+    while (1) {
+        printf("%s", prompt); // Tampilkan prompt ke user
+        if (fgets(input, sizeof(input), stdin) == NULL) {
+            printf("Error reading input. Please try again.\n");
+            continue;
+        }
+
+        input[strcspn(input, "\n")] = 0; // Hapus karakter newline
+
+        // Cek input kosong
+        if (strlen(input) == 0) {
+            printf("Input tidak boleh kosong. Silakan coba lagi.\n");
+            continue;
+        }
+
+        // Konversi string ke integer
+        char *endptr;
+        value = strtol(input, &endptr, 10);
+
+        // Cek input non-angka
+        if (*endptr != '\0') {
+            printf("Input harus berupa angka. Silakan coba lagi.\n");
+            continue;
+        }
+
+        // Pastikan input berada dalam rentang yang ditentukan
+        if (value < min || value > max) {
+            printf("Input harus antara %d dan %d. Silakan coba lagi.\n", min, max);
+            continue;
+        }
+
+        return value; 
+    }
+}
 
 void clearScreen() {
     #ifdef _WIN32
@@ -55,6 +106,7 @@ void startProgress(const char* message) {
 }
 
 void endProgress(const char* message) {
+    printf("\r                                                                      ");
     printf("\r%s\n", message);
 }
 
@@ -64,8 +116,4 @@ int confirmAction(const char* message) {
     if (fgets(answer, sizeof(answer), stdin) == NULL) return 0;
     answer[strcspn(answer, "\n")] = 0;
     return (answer[0] == 'y' || answer[0] == 'Y');
-}
-
-void printColored(const char* text) {
-    printf("%s", text);
 }

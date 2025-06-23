@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 #define MAX_DOCTORS 50
-#define MAX_DOCTORS_PER_SHIFT 5
+#define MAX_DOCTORS_PER_SHIFT 20
 #define TOTAL_SHIFT 90
 #define MAX_CONSECUTIVE_DAYS 5
 #define MIN_REST_HOURS 8
@@ -24,8 +24,6 @@ typedef struct {
     Dokter* dokter_bertugas[MAX_DOCTORS_PER_SHIFT];
     int jumlah_dokter;
 } Shift;
-
-// Add after other structs
 
 typedef struct {
     char nama[50];

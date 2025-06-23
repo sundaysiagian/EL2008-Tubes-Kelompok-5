@@ -1,11 +1,12 @@
 /*
 Program Pengelolaan Data Dokter
 Fungsi:
-1. Menambah dokter
-2. Menghapus dokter
-3. Menampilkan dokter
-4. Membaca dan load data dokter dari CSV
-5. Menyimpan data dokter ke CSV
+1. Menampilkan menu manajemen dokter
+2. Menambah dokter
+3. Menghapus dokter
+4. Menampilkan daftar dokter
+5. Membaca dan load data dokter dari CSV
+6. Menyimpan data dokter ke CSV
 */
 
 #include <stdio.h>
@@ -15,6 +16,159 @@ Fungsi:
 #include "../include/types.h"
 #include "../include/doctor_manager.h"
 #include "../include/utils.h"
+
+#define DOCTORS_FILE "data/sample/daftar_dokter.csv"
+#define LOAD_DOCTORS_FILE "data/doctors.csv"
+
+void doctorManagementMenu(Dokter daftar[], int *jumlah) {
+    int pilihan;
+    char nama[50];
+    int maks_shift, pref_pagi, pref_siang, pref_malam;
+
+    while(1) {
+        clearScreen();
+        printf("\n=== MANAJEMEN DATA DOKTER ===\n");
+        printLine('-', 60);
+        printf("[1] Tampilkan Daftar Dokter\n");
+        printf("[2] Tambah Dokter Baru\n");
+        printf("[3] Hapus Dokter\n");
+        printf("[4] Muat Data Dokter dari File CSV\n");
+        printf("[5] Simpan Data Dokter ke File CSV\n");
+        printf("[0] Kembali ke Menu Utama\n");
+        printLine('-', 60);
+        printf("Jumlah dokter saat ini: %d\n", *jumlah);
+        printLine('-', 60);
+
+        pilihan = getIntInput(0, 5, "Masukkan pilihan Anda (0-5): ");
+
+        switch(pilihan) {
+            case 1: // Tampilkan daftar dokter
+                clearScreen();
+                printf("\n=== DAFTAR DOKTER ===\n");
+                tampilkanDaftarDokter(daftar, *jumlah);
+                printf("\nTekan Enter untuk kembali ke menu manajemen dokter...");
+                getchar();
+                break;
+
+            case 2: // Tambah dokter baru
+                clearScreen();
+                printf("\n=== TAMBAH DOKTER BARU ===\n");
+                printf("Masukkan data dokter baru:\n");
+                printf("Nama dokter: ");
+                if (fgets(nama, 50, stdin) == NULL) {
+                    printf("Error membaca input\n");
+                    break;
+                }
+                nama[strcspn(nama, "\n")] = 0;
+                if (strlen(nama) == 0) {
+                    printf("Nama tidak boleh kosong.\n");
+                    printf("\nTekan Enter untuk melanjutkan...");
+                    getchar();
+                    break;
+                }
+
+                maks_shift = getIntInput(1, 21, "Maksimal shift per minggu (1-21): ");
+                printLine('-', 40);
+                printf("Preferensi shift (1 = Ya, 0 = Tidak):\n");
+                pref_pagi = getIntInput(0, 1, "Shift pagi (1 = Ya, 0 = Tidak): ");
+                pref_siang = getIntInput(0, 1, "Shift siang (1 = Ya, 0 = Tidak): ");
+                pref_malam = getIntInput(0, 1, "Shift malam (1 = Ya, 0 = Tidak): ");
+
+                // Validasi minimal satu preferensi shift
+                if (pref_pagi == 0 && pref_siang == 0 && pref_malam == 0) {
+                    printf("Error: Dokter harus memiliki minimal satu preferensi shift.\n");
+                    printf("\nTekan Enter untuk melanjutkan...");
+                    getchar();
+                    break;
+                }
+
+                tambahDokter(daftar, jumlah, nama, maks_shift, pref_pagi, pref_siang, pref_malam);
+                printf("\nTekan Enter untuk kembali ke menu manajemen dokter...");
+                getchar();
+                break;
+
+            case 3: // Hapus dokter
+                clearScreen();
+                printf("\n=== HAPUS DOKTER ===\n");
+                if (*jumlah == 0) {
+                    printf("Tidak ada dokter untuk dihapus.\n");
+                    printf("\nTekan Enter untuk kembali ke menu manajemen dokter...");
+                    getchar();
+                    break;
+                }
+                
+                tampilkanDaftarDokter(daftar, *jumlah);
+                printf("\nMasukkan nama dokter yang akan dihapus: ");
+                if (fgets(nama, 50, stdin) == NULL) {
+                    printf("Error membaca input\n");
+                    break;
+                }
+                nama[strcspn(nama, "\n")] = 0;
+
+                // Konfirmasi penghapusan
+                if (confirmAction("Yakin ingin menghapus dokter ini")) {
+                    hapusDokter(daftar, jumlah, nama);
+                } else {
+                    printf("Penghapusan dibatalkan.\n");
+                }
+                printf("\nTekan Enter untuk kembali ke menu manajemen dokter...");
+                getchar();
+                break;
+
+            case 4: // Muat data dari CSV
+                clearScreen();
+                printf("\n=== MUAT DATA DARI CSV ===\n");
+                printf("Data akan dimuat dari file: %s\n", LOAD_DOCTORS_FILE);
+                if (confirmAction("Lanjutkan? Data dokter saat ini akan diganti")) {
+                    startProgress("Memuat data dari CSV...");
+                    if (bacaDokterDariCSV(LOAD_DOCTORS_FILE, daftar, jumlah)) {
+                        endProgress("Berhasil memuat data dari CSV");
+                    } else {
+                        endProgress("Gagal memuat data dari CSV");
+                    }
+                } else {
+                    printf("Operasi dibatalkan.\n");
+                }
+                printf("\nTekan Enter untuk kembali ke menu manajemen dokter...");
+                getchar();
+                break;
+
+            case 5: // Simpan data ke CSV
+                clearScreen();
+                printf("\n=== SIMPAN DATA KE CSV ===\n");
+                if (*jumlah == 0) {
+                    printf("Tidak ada dokter untuk disimpan.\n");
+                    printf("\nTekan Enter untuk kembali ke menu manajemen dokter...");
+                    getchar();
+                    break;
+                }
+                
+                printf("Data akan disimpan ke file: %s\n", DOCTORS_FILE);
+                if (confirmAction("Lanjutkan? File yang sudah ada akan ditimpa")) {
+                    startProgress("Menyimpan data ke CSV...");
+                    if (simpanDokterKeCSV(DOCTORS_FILE, daftar, *jumlah)) {
+                        endProgress("Berhasil menyimpan data ke CSV");
+                    } else {
+                        endProgress("Gagal menyimpan data ke CSV");
+                    }
+                } else {
+                    printf("Operasi dibatalkan.\n");
+                }
+                printf("\nTekan Enter untuk kembali ke menu manajemen dokter...");
+                getchar();
+                break;
+
+            case 0: // Kembali ke menu utama
+                return;
+
+            default:
+                printf("Pilihan tidak valid.\n");
+                printf("\nTekan Enter untuk melanjutkan...");
+                getchar();
+        }
+    }
+}
+
 
 void tampilkanDaftarDokter(Dokter daftar[], int jumlah) {
     if (jumlah == 0) { // Jika daftar dokter kosong

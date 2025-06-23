@@ -1,13 +1,12 @@
 /*
-Program Utama Sistem Penjadwalan Dokter RS Semoga Sehat Selalu
+Program Pengelolaan Data Dokter
 Fungsi:
-1. Menampilkan splash screen dan menu utama
-2. Mengelola dokter (tambah, hapus, tampilkan)
-3. Membuat jadwal otomatis dan manual
-4. Menampilkan jadwal (harian, mingguan, bulanan, per dokter)
-5. Menyediakan statistik dan analisis jadwal
-6. Menyimpan dan memuat jadwal dari file CSV
-7. Pencarian dan validasi jadwal
+1. Menampilkan menu manajemen dokter
+2. Menambah dokter
+3. Menghapus dokter
+4. Menampilkan dokter
+5. Membaca dan load data dokter dari CSV
+6. Menyimpan data dokter ke CSV
 */
 
 #include <stdio.h>
@@ -76,6 +75,25 @@ void displaySplashScreen() {
 
     printf("\n\n                      Press Enter to continue...");
     getchar(); // Tunggu user tekan Enter
+}
+
+void displayEnhancedMenu() {
+    clearScreen();
+    printf("\n=== RS SEMOGA SEHAT SELALU - SISTEM PENJADWALAN DOKTER ===\n\n");
+    printf("[1] Manajemen Data Dokter\n");
+    printf("[2] Buat Jadwal Otomatis\n");
+    printf("[3] Tampilkan Jadwal Harian\n");
+    printf("[4] Tampilkan Jadwal Mingguan\n");
+    printf("[5] Tampilkan Jadwal Bulanan\n");
+    printf("[6] Statistik dan Analisis Jadwal\n");
+    printf("[7] Simpan Jadwal ke File CSV\n");
+    printf("[8] Muat Jadwal dari File CSV\n");
+    printf("[9] Edit Jadwal Secara Manual\n");
+    printf("[10] Tampilkan Jadwal Per Dokter\n");
+    printf("[11] Pencarian\n");
+    printf("[0] Keluar dari Aplikasi\n\n");
+    printLine('-', 60);
+    printf("Masukkan pilihan Anda (0-11): ");
 }
 
 int main() {
@@ -217,33 +235,7 @@ int main() {
                 getchar();
                 break;
 
-            case 8: // Menu tampilkan jadwal per dokter
-                clearScreen();
-                printf("\n=== TAMPILKAN JADWAL PER DOKTER ===\n");
-                if (!jadwal_dibuat) { // Cek apakah jadwal sudah dibuat
-                    printf("Error: Jadwal belum dibuat.\n");
-                    printf("Silakan buat jadwal terlebih dahulu.\n");
-                    printf("\nTekan Enter untuk melanjutkan...");
-                    getchar();
-                    break;
-                }
-                
-                if (jumlah_dokter <= 0) { // Cek apakah ada dokter yang tersedia
-                    printf("Tidak ada dokter yang tersedia.\n");
-                    printf("\nTekan Enter untuk melanjutkan...");
-                    getchar();
-                    break;
-                }
-                
-                tampilkanDaftarDokter(daftar_dokter, jumlah_dokter); // Tampilkan daftar dokter
-                int dok_idx = getIntInput(1, jumlah_dokter, "Pilih nomor dokter: ") - 1; // Pilih dokter (index-1)
-                tampilkanJadwalPerDokter(jadwal, &daftar_dokter[dok_idx]); // Tampilkan jadwal dokter terpilih
-                
-                printf("\nTekan Enter untuk melanjutkan...");
-                getchar();
-                break;
-
-            case 9: // Menu muat jadwal dari file
+            case 8: // Menu muat jadwal dari file
                 clearScreen();
                 printf("\n=== MUAT JADWAL DARI FILE ===\n");
                 if (jumlah_dokter <= 0) { // Cek apakah ada data dokter
@@ -270,8 +262,8 @@ int main() {
                 printf("\nTekan Enter untuk melanjutkan...");
                 getchar();
                 break;
-            
-            case 10: // Menu edit jadwal manual
+
+            case 9: // Menu edit jadwal manual
                 clearScreen();
                 printf("\n=== EDIT JADWAL MANUAL ===\n");
                 if (!jadwal_dibuat) { // Cek apakah jadwal sudah dibuat
@@ -290,6 +282,32 @@ int main() {
                 }
                 
                 editJadwalManual(jadwal, daftar_dokter, jumlah_dokter); // Masuk ke menu edit manual
+                break;
+            
+            case 10: // Menu tampilkan jadwal per dokter
+                clearScreen();
+                printf("\n=== TAMPILKAN JADWAL PER DOKTER ===\n");
+                if (!jadwal_dibuat) { // Cek apakah jadwal sudah dibuat
+                    printf("Error: Jadwal belum dibuat.\n");
+                    printf("Silakan buat jadwal terlebih dahulu.\n");
+                    printf("\nTekan Enter untuk melanjutkan...");
+                    getchar();
+                    break;
+                }
+                
+                if (jumlah_dokter <= 0) { // Cek apakah ada dokter yang tersedia
+                    printf("Tidak ada dokter yang tersedia.\n");
+                    printf("\nTekan Enter untuk melanjutkan...");
+                    getchar();
+                    break;
+                }
+                
+                tampilkanDaftarDokter(daftar_dokter, jumlah_dokter); // Tampilkan daftar dokter
+                int dok_idx = getIntInput(1, jumlah_dokter, "Pilih nomor dokter: ") - 1; // Pilih dokter (index-1)
+                tampilkanJadwalPerDokter(jadwal, &daftar_dokter[dok_idx]); // Tampilkan jadwal dokter terpilih
+                
+                printf("\nTekan Enter untuk melanjutkan...");
+                getchar();
                 break;
         
             case 11: // Menu pencarian

@@ -1,0 +1,70 @@
+Based on your codebase, the hospital scheduling system must satisfy 7 main constraints:
+
+Core Constraints (from constraints.c)
+Shift Capacity Constraint - Each shift cannot exceed the maximum number of doctors per shift (MAX_DOCTORS_PER_SHIFT)
+
+No Duplicate Assignment - A doctor cannot be assigned to the same shift twice
+
+No Consecutive Shifts in Same Day - A doctor cannot work consecutive shifts on the same day (e.g., morning + afternoon, or afternoon + night)
+
+Maximum 3 Night Shifts per Week - Each doctor can only work a maximum of 3 night shifts per week
+
+Maximum 5 Total Shifts per Week - Each doctor can only work a maximum of 5 shifts total per week
+
+No Back-to-Back Shifts - A doctor cannot work a night shift followed immediately by a morning shift the next day
+
+Shift Preference Compliance - Doctors should only be assigned to shifts they prefer (pagi/siang/malam preferences)
+
+Additional Validation Rules
+The system also performs these validations:
+
+No Empty Shifts - Every shift must have at least one doctor assigned
+Workload Distribution - The algorithm tries to balance workload among doctors
+Implementation Notes
+The apakahAlokasiValid() function checks constraints 1-3, 6, and 7
+The hitungShiftDokterMinggu() and hitungShiftMalamDokterMinggu() functions help enforce constraints 4 and 5
+The validasiConstraintLengkap() function performs comprehensive validation of all constraints
+The system can optionally ignore preference constraints (constraint 7) if no valid schedule can be found with all preferences honored
+These constraints ensure fair workload distribution, respect doctor preferences, and maintain operational requirements for the hospital.
+
+
+***
+
+notes on constraints:
+Core Constraints (from constraints.c)
+Shift Capacity Constraint - Each shift cannot exceed the maximum number of doctors per shift (MAX_DOCTORS_PER_SHIFT)
+
+No Duplicate Assignment - A doctor cannot be assigned to the same shift twice
+
+No Consecutive Shifts in Same Day - A doctor cannot work consecutive shifts on the same day (e.g., morning + afternoon, or afternoon + night)
+
+Maximum 3 Night Shifts per Week - Each doctor can only work a maximum of 3 night shifts per week
+
+Maximum 5 Total Shifts per Week - Each doctor can only work a maximum of 5 shifts total per week
+
+No Back-to-Back Shifts - A doctor cannot work a night shift followed immediately by a morning shift the next day
+
+Shift Preference Compliance - Doctors should only be assigned to shifts they prefer (pagi/siang/malam preferences)
+
+Additional Validation Rules
+The system also performs these validations:
+
+No Empty Shifts - Every shift must have at least one doctor assigned
+Workload Distribution - The algorithm tries to balance workload among doctors
+Implementation Notes
+The apakahAlokasiValid() function checks constraints 1-3, 6, and 7
+The hitungShiftDokterMinggu() and hitungShiftMalamDokterMinggu() functions help enforce constraints 4 and 5
+The validasiConstraintLengkap() function performs comprehensive validation of all constraints
+The system can optionally ignore preference constraints (constraint 7) if no valid schedule can be found with all preferences honored
+These constraints ensure fair workload distribution, respect doctor preferences, and maintain operational requirements for the hospital.
+
+format:
+"nama,maks_shift_mingguan,pref_pagi,pref_siang,pref_malam"
+- nama is anything with Dr. and a one word name
+- maks_shift_mingguan is somewhere between 1-21
+- pref_pagi/siang/malam is filled with either 0 (do not prefer) or 1 (prefer) the respective shift
+
+for example, if pref_pagi is 0, means the doctor would not prefer working on morning shifts
+
+request:
+i need you to make me 7 separate .csv snippets, obeying the format, to test each constraint that i have made for my program

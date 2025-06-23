@@ -1,16 +1,4 @@
 nama,maks_shift_mingguan,pref_pagi,pref_siang,pref_malam
-Dr. AllShift1,7,1,1,1
-Dr. AllShift2,6,1,1,1
-Dr. AllShift3,7,1,1,1
-Dr. MorningAfternoon1,6,1,1,0
-Dr. MorningAfternoon2,7,1,1,0
-Dr. AfternoonNight1,5,0,1,1
-Dr. AfternoonNight2,6,0,1,1
-Dr. MorningNight1,7,1,0,1
-Dr. MorningNight2,6,1,0,1
-Dr. MorningOnly1,5,1,0,0
-Dr. MorningOnly2,7,1,0,0
-Dr. AfternoonOnly1,6,0,1,0
-Dr. AfternoonOnly2,5,0,1,0
-Dr. NightOnly1,7,0,0,1
-Dr. NightOnly2,6,0,0,1
+Dr. Early,10,1,0,0
+Dr. Late,10,0,0,1
+Dr. FlexTime,10,1,0,1

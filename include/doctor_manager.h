@@ -8,5 +8,6 @@ void hapusDokter(Dokter daftar[], int *jumlah, const char *nama);
 void tampilkanDaftarDokter(Dokter daftar[], int jumlah);
 int bacaDokterDariCSV(const char *filename, Dokter daftar[], int *jumlah);
 int simpanDokterKeCSV(const char *filename, Dokter daftar[], int jumlah);
+void doctorManagementMenu(Dokter daftar[], int *jumlah);
 
 #endif

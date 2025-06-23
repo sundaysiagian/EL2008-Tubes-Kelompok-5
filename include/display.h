@@ -15,5 +15,6 @@ void tampilkanJadwalPerDokter(Shift jadwal[], Dokter *dokter);
 int hitungJumlahShiftDokter(Shift jadwal[], Dokter *dokter); 
 void validasiJadwal(Shift jadwal[], Dokter daftar_dokter[], int jumlah_dokter);
 void printLine(char character, int length);
+void tampilkanPelanggaranPreferensiPerDokter(Shift jadwal[], Dokter daftar_dokter[], int jumlah_dokter);
 
 #endif

@@ -5,13 +5,9 @@
 #include "../include/scheduler.h"
 #include "../include/utils.h"
 
-// This file contains a simplified workflow test
-// that mimics the end-to-end user experience
-
 int main() {
     printf("=== MAIN APPLICATION WORKFLOW TEST ===\n\n");
     
-    // 1. Initialize doctor list
     Dokter daftar_dokter[MAX_DOCTORS];
     int jumlah_dokter = 0;
     
@@ -24,7 +20,6 @@ int main() {
     
     printf("Doctor count: %d\n", jumlah_dokter);
     
-    // 2. Create schedule
     Shift jadwal[TOTAL_SHIFT];
     printf("\n2. Creating automated schedule...\n");
     int result = buatJadwalOtomatis(jadwal, daftar_dokter, jumlah_dokter);
@@ -32,7 +27,6 @@ int main() {
     if (result) {
         printf("Schedule created successfully!\n");
         
-        // 3. Display some schedule information
         printf("\n3. Schedule statistics:\n");
         printf("Total shifts: %d\n", TOTAL_SHIFT);
         
@@ -44,7 +38,6 @@ int main() {
         }
         printf("Shifts filled: %d (%.1f%%)\n", shifts_filled, (float)shifts_filled/TOTAL_SHIFT*100);
         
-        // 4. Doctor shift counts
         printf("\n4. Doctor shift counts:\n");
         for (int i = 0; i < jumlah_dokter; i++) {
             int shift_count = 0;

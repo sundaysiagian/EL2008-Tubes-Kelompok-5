@@ -1,6 +1,5 @@
 #include "unity/unity.h"
 
-// Function declarations for tests
 void test_doctor_manager(void);
 void test_scheduler_functionality(void);
 void test_utils(void);
@@ -10,8 +9,7 @@ int main(void) {
     UNITY_BEGIN();
     
     printf("\n=== RUNNING ALL TESTS ===\n\n");
-    
-    // Run all tests
+
     RUN_TEST(test_doctor_manager);
     RUN_TEST(test_scheduler_functionality);
     RUN_TEST(test_utils);
